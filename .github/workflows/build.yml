@@ -19,16 +19,16 @@ jobs:
         dotnet-version: 10.0.x
     
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore src
     
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build src --no-restore
     
     - name: Run tests
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test src --no-build --verbosity normal
 
     - name: Pack NuGet packages
-      run: dotnet pack --configuration Release --output ./nupkgs
+      run: dotnet pack src --configuration Release --output ./nupkgs
 
     - name: Publish to NuGet (only on main)
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
