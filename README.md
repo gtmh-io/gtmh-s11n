@@ -16,40 +16,39 @@ GTMH.S11n (serialization) provides a clean, declarative way to serialize and des
 Here's a simple "Hello World" that demonstrates polymorphic serialization:
 ```csharp
 // Define your interface
-public interface IOperator
-{
-    void Execute();
-}
+public interface IOperator { void Execute(); }
 
-// Create implementations with serialization attributes
 public partial class Say : IOperator
 {
-    [GTS11n(Required = true)]
+    [GTS11n(Required = true)] // the following field is serialised
     public readonly string Normally;
     public void Execute() => Console.Write(Normally);
 }
 public partial class Shout : IOperator
 {
-    [GTS11n(Required = true)]
+    [GTS11n(Required = true)] // the following field is serialised
     public string Loudly { get; private set; }
     
     public void Execute() => Console.Write($"{Loudly.ToUpper()}!");
 }
-[GTS11n]
+[GTS11n] // we have no fields to serialise but want the object serialised
 public partial class SPC : IOperator { public void Execute() => Console.Write(' '); }
-[GTS11n]
+[GTS11n] // we have no fields to serialise but want the object serialised
 public partial class EOM : IOperator { public void Execute() => Console.WriteLine(); }
 
 
 // Define your object graph
 public partial class Algorithm
 {
+    // A single non-nullable head operation
     [GTS11n(Instance = true, Required = true)]
     public IOperator Head { get; set; }
     
+    // a variable number of operations in the body
     [GTS11n(Instance = true, Required = true)]
     public readonly ImmutableArray<IOperator> Body;
     
+    // an optional tail operation
     [GTS11n(Instance = true)]
     public IOperator? Tail { get; }
 }
@@ -80,3 +79,9 @@ var algo = new Algorithm(cfg.ForInit());
 algo.Head.Execute();                    // Prints: Hello
 foreach(var op in algo.Body) op.Execute(); // Prints: (wasting time)(coffee time) WORLD!
 algo.Tail?.Execute();                   // Prints: newline
+
+```
+Output
+```code
+Hello (wasting time)(coffee time) WORLD!
+```
