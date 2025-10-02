@@ -13,6 +13,7 @@ namespace GTMH.S11n
     /// <summary>
     /// This only applies to TInstances which may be null
     /// </summary>
+    // TODO use the required keyword/syntax ?
 		public bool Required = false;
 
 		public string EditorBrief = "";
