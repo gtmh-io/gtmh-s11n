@@ -2,14 +2,23 @@
 using GTMH.S11n;
 
 using HelloWorld;
+using HelloWorld.Operations;
 
-var cfg = new DictionaryConfig()
+/*var cfg = new DictionaryConfig()
 {
-  { "Header", "Say" }
+  { "Head", "Say" }
 };
 
-var algo = new Algorithm(cfg.ForInit());
+var algo = new Algorithm(cfg.ForInit());*/
+//var algo = new Algorithm(
+//  new Say("Hello"), 
+//  new IOperator[] { new SPC(), new Mumble("wasting time"), new Mumble("coffee time"), new SPC(), new Shout("World") },
+//  new EOM()
+//  );
+var algo = new Algorithm(new Say("Hello World"), Array.Empty<IOperator>(), null );
 
-algo.Header.Execute();
+var slln = algo.ParseS11n();
+
+algo.Head.Execute();
 foreach(var op in algo.Body ) op.Execute();
-if ( algo.Footer != null ) algo.Footer.Execute();
+if ( algo.Tail != null ) algo.Tail.Execute();

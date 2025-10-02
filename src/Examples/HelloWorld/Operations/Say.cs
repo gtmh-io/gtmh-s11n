@@ -10,5 +10,8 @@ public partial class Say : IOperator
 {
   [GTS11n(Required=true)]
   public readonly string Normally;
-  public void Execute() => Console.WriteLine(Normally);
+
+  public Say(string v) { Normally=v; }
+
+  public void Execute() => Console.Write(Normally);
 }
