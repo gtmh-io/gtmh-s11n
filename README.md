@@ -1,0 +1,1 @@
+GTMH-S11n provides a means to markup your classes so that instantiantions of them may be saved and recreated. It is geared towards serialising functionality, or algorithms rather than data.
