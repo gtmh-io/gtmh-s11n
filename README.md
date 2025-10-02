@@ -22,16 +22,12 @@ public interface IOperator
 }
 
 // Create implementations with serialization attributes
-[GTS11n]
 public partial class Say : IOperator
 {
     [GTS11n(Required = true)]
     public readonly string Normally;
-    
     public void Execute() => Console.Write(Normally);
 }
-
-[GTS11n]
 public partial class Shout : IOperator
 {
     [GTS11n(Required = true)]
@@ -39,6 +35,11 @@ public partial class Shout : IOperator
     
     public void Execute() => Console.Write($"{Loudly.ToUpper()}!");
 }
+[GTS11n]
+public partial class SPC : IOperator { public void Execute() => Console.Write(' '); }
+[GTS11n]
+public partial class EOM : IOperator { public void Execute() => Console.WriteLine(); }
+
 
 // Define your object graph
 public partial class Algorithm
@@ -52,3 +53,29 @@ public partial class Algorithm
     [GTS11n(Instance = true)]
     public IOperator? Tail { get; }
 }
+
+You can now instantiate a complex object process from simple configuration
+
+```csharp
+var cfg = new DictionaryConfig()
+{
+    {"Head", "HelloWorld.Say"},
+    {"Head.Normally", "Hello"},
+    {"Body.Array-Length", "5"},
+    {"Body.0", "HelloWorld.SPC"},
+    {"Body.1", "HelloWorld.Mumble"},
+    {"Body.1.Murmur", "wasting time"},
+    {"Body.2", "HelloWorld.Mumble"},
+    {"Body.2.Murmur", "coffee time"},
+    {"Body.3", "HelloWorld.SPC"},
+    {"Body.4", "HelloWorld.Shout"},
+    {"Body.4.Loudly", "World"},
+    {"Tail", "HelloWorld.EOM"}
+};
+
+var algo = new Algorithm(cfg.ForInit());
+
+// Execute the algorithm
+algo.Head.Execute();                    // Prints: Hello
+foreach(var op in algo.Body) op.Execute(); // Prints: (wasting time)(coffee time) WORLD!
+algo.Tail?.Execute();                   // Prints: newline
