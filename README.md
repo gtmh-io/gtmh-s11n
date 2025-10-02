@@ -84,16 +84,16 @@ Output
 ```code
 Hello (wasting time)(coffee time) WORLD!
 ```
-💡 Key Features
+## Key Features
 Polymorphic Instantiation
 The library automatically resolves types at runtime based on configuration values. In the example above, "HelloWorld.Say" is instantiated as a Say object that implements IOperator.
 Flexible Property Support
 
-✅ Regular properties with getters/setters
-✅ Init-only properties
-✅ Readonly fields
-✅ Private setters
-✅ Immutable collections
+- Regular properties with getters/setters
+- Init-only properties
+- Readonly fields
+- Private setters
+- Immutable collections
 
 Simple Configuration Format
 Uses dot-notation for nested properties and array indexing:
