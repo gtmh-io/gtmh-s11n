@@ -6,7 +6,7 @@ using System.Text;
 
 namespace GTMH.S11n.UnitTests
 {
-  public class GTFieldsTestsG
+  public class GTFieldsTests
   {
     [Test]
     public async ValueTask TestHasGTFieldsAsProperties()
@@ -304,6 +304,15 @@ namespace GTMH.S11n.UnitTests
       await Assert.That(_obj.Instances.Length).IsEqualTo(2);
       await Assert.That(_obj.Instances[0].Value).IsEqualTo("roger_A");
       await Assert.That(_obj.Instances[1].Value).IsEqualTo("rabbit_B");
+    }
+    [Test]
+    public async ValueTask TestTopLevelS11n()
+    {
+      // that this compiles is the test
+      var obj = new HasNotGTFields();
+      var s11n = obj.ParseS11n();
+      var _obj = new HasNotGTFields(new DictionaryConfig(s11n).ForInit());
+      await Assert.That(obj).IsNotEqualTo(_obj);
     }
   }
 }

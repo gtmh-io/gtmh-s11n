@@ -18,7 +18,6 @@ namespace GTMH.S11n
   {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-      //System.Diagnostics.Debugger.Launch();
       IncrementalValuesProvider<S11nClassDefn> defns = context.SyntaxProvider.CreateSyntaxProvider(
         predicate: (node, cancelToken)=> FastFilterTarget(node),
         transform: (ctx, cancelToken)=> DeepSeekTarget(ctx)
@@ -58,6 +57,12 @@ namespace GTMH.S11n
       return true;
     }
 
+
+    private static bool IsTopLevelS11n(INamedTypeSymbol classSymbol)
+    {
+     return classSymbol.GetAttributes().Any(attr => attr.AttributeClass?.ToDisplayString() == "GTMH.S11n.GTS11nAttribute");
+    }
+
     private static List<IFieldType> ParseGTFields(INamedTypeSymbol classSymbol)
     {
       var attrs = new List<IFieldType>();
@@ -90,12 +95,15 @@ namespace GTMH.S11n
       var classSymbol = ctx.SemanticModel.GetDeclaredSymbol(cls);
       if ( classSymbol == null ) return null;
 
+
+      bool topLevel = IsTopLevelS11n(classSymbol);
+
       var attrs=ParseGTFields(classSymbol);
 
       // need to check if any parent classes have GTFields
       var isGTDerived = SeekGTFieldParents(classSymbol.BaseType);
 
-      if(!attrs.Any()&&!isGTDerived)
+      if(!attrs.Any()&&!isGTDerived&&!topLevel)
       {
         return null;
       }
@@ -359,6 +367,10 @@ namespace GTMH.S11n
       if(!string.IsNullOrEmpty(a_Defn.Namespace))
       {
         code.WriteLine($"namespace {a_Defn.Namespace};");
+      }
+      if(a_Defn.Visibility != "public")
+      {
+        code.WriteLine("In lieu of a proper error, I'll just bork you: class must be public");
       }
       code.WriteLine($"{a_Defn.Visibility} partial class {a_Defn.ClassName}");
       code.WriteLine("{");

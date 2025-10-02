@@ -22,6 +22,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="vsbin\**" />
+    <EmbeddedResource Remove="vsbin\**" />
+    <None Remove="vsbin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="TUnit" Version="*" />
   </ItemGroup>
 
