@@ -54,6 +54,7 @@ public partial class Algorithm
     public IOperator? Tail { get; }
 }
 
+```
 You can now instantiate a complex object process from simple configuration
 
 ```csharp
