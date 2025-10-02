@@ -314,5 +314,13 @@ namespace GTMH.S11n.UnitTests
       var _obj = new HasNotGTFields(new DictionaryConfig(s11n).ForInit());
       await Assert.That(obj).IsNotEqualTo(_obj);
     }
+    [Test]
+    public async ValueTask TestImplementsInterface()
+    {
+      var obj = new HasNotGTFieldsImplementsInterface();
+      var s11n = obj.ParseS11n();
+      var _obj = new HasNotGTFieldsImplementsInterface(new DictionaryConfig(s11n).ForInit());
+      await Assert.That(obj).IsNotEqualTo(_obj);
+    }
   }
 }

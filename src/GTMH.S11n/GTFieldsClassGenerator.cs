@@ -18,6 +18,7 @@ namespace GTMH.S11n
   {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
+      //System.Diagnostics.Debugger.Launch();
       IncrementalValuesProvider<S11nClassDefn> defns = context.SyntaxProvider.CreateSyntaxProvider(
         predicate: (node, cancelToken)=> FastFilterTarget(node),
         transform: (ctx, cancelToken)=> DeepSeekTarget(ctx)
@@ -103,7 +104,9 @@ namespace GTMH.S11n
       // need to check if any parent classes have GTFields
       var isGTDerived = SeekGTFieldParents(classSymbol.BaseType);
 
-      if(!attrs.Any()&&!isGTDerived&&!topLevel)
+      var implements = attrs.Any() || topLevel||isGTDerived || SeekImplementsInterface(classSymbol, ctx);
+
+      if(!attrs.Any()&&!isGTDerived&&!topLevel&&!implements)
       {
         return null;
       }
@@ -137,6 +140,22 @@ namespace GTMH.S11n
         }
       }
       return rval;
+    }
+
+    private static bool SeekImplementsInterface(INamedTypeSymbol classSymbol, GeneratorSyntaxContext ctx)
+    {
+      if ( classSymbol == null ) return false;
+      if(classSymbol.Name.Contains("HasNotGTFieldsImplementsInterface"))
+      {
+        //System.Diagnostics.Debugger.Launch();
+      }
+      var interfaces = classSymbol.AllInterfaces;
+      foreach(var iface in interfaces)
+      {
+        var gtfAttr = iface.GetAttributes().FirstOrDefault(attr => attr.AttributeClass?.ToDisplayString() == "GTMH.S11n.GTS11nAttribute");
+        if ( gtfAttr != null ) return true;
+      }
+      return SeekImplementsInterface(classSymbol.BaseType, ctx);
     }
 
     private static bool SeekGTFieldParents(INamedTypeSymbol baseType)
