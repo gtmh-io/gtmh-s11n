@@ -16,25 +16,25 @@ GTMH.S11n (serialization) provides a clean, declarative way to serialize and des
 Here's a simple "Hello World" that demonstrates polymorphic serialization:
 ```csharp
 // Define your interface
+[GTS11n] // ensures that any implementation is serialisable
 public interface IOperator { void Execute(); }
 
-public partial class Say : IOperator
-{
-    [GTS11n(Required = true)] // the following field is serialised
-    public readonly string Normally;
-    public void Execute() => Console.Write(Normally);
-}
-public partial class Shout : IOperator
-{
-    [GTS11n(Required = true)] // the following field is serialised
-    public string Loudly { get; private set; }
-    
-    public void Execute() => Console.Write($"{Loudly.ToUpper()}!");
-}
-[GTS11n] // we have no fields to serialise but want the object serialised
+// Define your implementations
 public partial class SPC : IOperator { public void Execute() => Console.Write(' '); }
-[GTS11n] // we have no fields to serialise but want the object serialised
+
 public partial class EOM : IOperator { public void Execute() => Console.WriteLine(); }
+
+public partial class WithContent
+{
+  [GTS11n(Required = true)]
+  public string Value { get; private set; }
+}
+
+public partial class Mumble : WithContent, IOperator { public void Execute()=>Console.Write($"({Value.ToLower()})"); }
+
+public partial class Shout : WithContent, IOperator { public void Execute()=>Console.Write($"{Value.ToUpper()}!"); }
+
+public partial class Say : WithContent, IOperator { public void Execute() => Console.Write(Value); }
 
 
 // Define your object graph
@@ -59,18 +59,18 @@ You can now instantiate a complex object process from simple configuration
 ```csharp
 var cfg = new DictionaryConfig()
 {
-    {"Head", "HelloWorld.Say"},
-    {"Head.Normally", "Hello"},
-    {"Body.Array-Length", "5"},
-    {"Body.0", "HelloWorld.SPC"},
-    {"Body.1", "HelloWorld.Mumble"},
-    {"Body.1.Murmur", "wasting time"},
-    {"Body.2", "HelloWorld.Mumble"},
-    {"Body.2.Murmur", "coffee time"},
-    {"Body.3", "HelloWorld.SPC"},
-    {"Body.4", "HelloWorld.Shout"},
-    {"Body.4.Loudly", "World"},
-    {"Tail", "HelloWorld.EOM"}
+  {"Head", "HelloWorld.Say" },
+  {"Head.Value", "Hello" },
+  {"Body.Array-Length", "5" },
+  {"Body.0", "HelloWorld.SPC" },
+  {"Body.1", "HelloWorld.Mumble" },
+  {"Body.1.Value", "wasting time" },
+  {"Body.2", "HelloWorld.Mumble" },
+  {"Body.2.Value", "coffee time" },
+  {"Body.3", "HelloWorld.SPC" },
+  {"Body.4", "HelloWorld.Shout" },
+  {"Body.4.Value", "World" },
+  {"Tail", "HelloWorld.EOM" }
 };
 
 var algo = new Algorithm(cfg.ForInit());

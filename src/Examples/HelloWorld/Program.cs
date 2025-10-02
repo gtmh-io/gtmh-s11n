@@ -1,21 +1,20 @@
-﻿// See https://aka.ms/new-console-template for more information
-using GTMH.S11n;
+﻿using GTMH.S11n;
 
 using HelloWorld;
 
 var cfg = new DictionaryConfig()
 {
   {"Head", "HelloWorld.Say" },
-  {"Head.Normally", "Hello" },
+  {"Head.Value", "Hello" },
   {"Body.Array-Length", "5" },
   {"Body.0", "HelloWorld.SPC" },
   {"Body.1", "HelloWorld.Mumble" },
-  {"Body.1.Murmur", "wasting time" },
+  {"Body.1.Value", "wasting time" },
   {"Body.2", "HelloWorld.Mumble" },
-  {"Body.2.Murmur", "coffee time" },
+  {"Body.2.Value", "coffee time" },
   {"Body.3", "HelloWorld.SPC" },
   {"Body.4", "HelloWorld.Shout" },
-  {"Body.4.Loudly", "World" },
+  {"Body.4.Value", "World" },
   {"Tail", "HelloWorld.EOM" }
 };
 
