@@ -17,12 +17,12 @@ Here's a simple "Hello World" that demonstrates polymorphic serialization:
 ```csharp
 // Define your interface
 [GTS11n] // ensures that any implementation is serialisable
-public interface IOperator { void Execute(); }
+public interface IOperator { void Execute(StringBuilder a_State); }
 
 // Define your implementations
-public partial class SPC : IOperator { public void Execute() => Console.Write(' '); }
+public partial class SPC : IOperator { public void Execute(StringBuilder a_State) => a_State.Append(' '); }
 
-public partial class EOM : IOperator { public void Execute() => Console.WriteLine(); }
+public partial class EOM : IOperator { public void Execute(StringBuilder a_State) => a_State.AppendLine(); }
 
 public partial class WithContent
 {
@@ -30,27 +30,30 @@ public partial class WithContent
   public string Value { get; private set; }
 }
 
-public partial class Mumble : WithContent, IOperator { public void Execute()=>Console.Write($"({Value.ToLower()})"); }
+public partial class Mumble : WithContent, IOperator { public void Execute(StringBuilder a_State)=>a_State.Append($"({Value.ToLower()})"); }
 
-public partial class Shout : WithContent, IOperator { public void Execute()=>Console.Write($"{Value.ToUpper()}!"); }
+public partial class Shout : WithContent, IOperator { public void Execute(StringBuilder a_State)=>a_State.Append($"{Value.ToUpper()}!"); }
 
-public partial class Say : WithContent, IOperator { public void Execute() => Console.Write(Value); }
+public partial class Say : WithContent, IOperator { public void Execute(StringBuilder a_State) => a_State.Append(Value); }
 
-
-// Define your object graph
+// Define your algorithm structure
 public partial class Algorithm
 {
-    // A single non-nullable head operation
-    [GTS11n(Instance = true, Required = true)]
-    public IOperator Head { get; set; }
-    
-    // a variable number of operations in the body
-    [GTS11n(Instance = true, Required = true)]
-    public readonly ImmutableArray<IOperator> Body;
-    
-    // an optional tail operation
-    [GTS11n(Instance = true)]
-    public IOperator? Tail { get; }
+  [GTS11n(Instance=true, Required=true)]
+  public IOperator Head { get; set; }
+  [GTS11n(Instance=true, Required=true)]
+  public readonly ImmutableArray<IOperator> Body;
+  [GTS11n(Instance=true)]
+  public IOperator ? Tail { get; }
+
+  public StringBuilder Execute()
+  {
+    var rval = new StringBuilder();
+    Head.Execute(rval);
+    foreach( var op in Body) op.Execute(rval);
+    Tail?.Execute(rval);
+    return rval;
+  }
 }
 
 ```
@@ -59,26 +62,22 @@ You can now instantiate a complex object process from simple configuration
 ```csharp
 var cfg = new DictionaryConfig()
 {
-  {"Head", "HelloWorld.Say" },
+  {"Head", "HelloWorldStateful.Say" },
   {"Head.Value", "Hello" },
   {"Body.Array-Length", "5" },
-  {"Body.0", "HelloWorld.SPC" },
-  {"Body.1", "HelloWorld.Mumble" },
+  {"Body.0", "HelloWorldStateful.SPC" },
+  {"Body.1", "HelloWorldStateful.Mumble" },
   {"Body.1.Value", "wasting time" },
-  {"Body.2", "HelloWorld.Mumble" },
+  {"Body.2", "HelloWorldStateful.Mumble" },
   {"Body.2.Value", "coffee time" },
-  {"Body.3", "HelloWorld.SPC" },
-  {"Body.4", "HelloWorld.Shout" },
+  {"Body.3", "HelloWorldStateful.SPC" },
+  {"Body.4", "HelloWorldStateful.Shout" },
   {"Body.4.Value", "World" },
-  {"Tail", "HelloWorld.EOM" }
+  {"Tail", "HelloWorldStateful.EOM" }
 };
 
 var algo = new Algorithm(cfg.ForInit());
-
-// Execute the algorithm
-algo.Head.Execute();                    // Prints: Hello
-foreach(var op in algo.Body) op.Execute(); // Prints: (wasting time)(coffee time) WORLD!
-algo.Tail?.Execute();                   // Prints: newline
+Console.WriteLine(algo.Execute());
 
 ```
 Output
