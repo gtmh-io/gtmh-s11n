@@ -2,7 +2,7 @@
 
 A lightweight, attribute-based serialization library for C# that enables easy configuration and instantiation of polymorphic object graphs through simple key-value pairs.
 
-## 🎯 What is GTMH.S11n?
+## What is GTMH.S11n?
 
 GTMH.S11n (serialization) provides a clean, declarative way to serialize and deserialize complex object hierarchies, with special support for:
 - **Polymorphic types** - Serialize interfaces and abstract classes
@@ -11,7 +11,7 @@ GTMH.S11n (serialization) provides a clean, declarative way to serialize and des
 - **Type-safe** - Compile-time checking with source generators
 - **Minimal boilerplate** - Just add attributes, no manual mapping code
 
-## 🚀 Quick Example
+## Quick Example
 
 Here's a simple "Hello World" that demonstrates polymorphic serialization:
 ```csharp
@@ -102,6 +102,21 @@ Head.Value - Sets the Value property on the Head object
 Body.0 - First element in the Body array
 Body.Array-Length - Specifies array size
 
-Source Generator Powered
+## Source Generator Powered
 The partial keyword enables compile-time code generation for efficient serialization without reflection overhead.
+
+## Use Cases
+
+- Plugin Systems - Load different implementations based on configuration
+- Workflow Engines - Define complex processing pipelines in config files
+- Game Development - Configure game objects, AI behaviors, or level data
+- Rule Engines - Build configurable business logic
+- Test Fixtures - Easy setup of complex test objects
+- ETL Pipelines - Configure data transformation workflows
+- Algo Development - eg trading algos
+
+## Installation
+```bash
+dotnet add package GTMH.S11n
+```
 
