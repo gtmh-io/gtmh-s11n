@@ -84,6 +84,20 @@ Output
 ```code
 Hello (wasting time)(coffee time) WORLD!
 ```
+You could go further and make Algorithm itself an IOperator and have algorithms of algorithms.
+
+```csharp
+public partial class Algorithm : IOperator
+{
+  // ...
+  public void Execute(StringBuilder a_State)
+  {
+    Head.Execute(a_State);
+    foreach( var op in Body) op.Execute(a_State);
+    Tail?.Execute(a_State);
+  }
+}
+```
 ## Key Features
 Polymorphic Instantiation
 The library automatically resolves types at runtime based on configuration values. In the example above, "HelloWorld.Say" is instantiated as a Say object that implements IOperator.
