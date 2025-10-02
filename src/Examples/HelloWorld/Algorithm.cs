@@ -15,11 +15,4 @@ public partial class Algorithm
   public readonly ImmutableArray<IOperator> Body;
   [GTS11n(Instance=true)]
   public IOperator ? Tail { get; }
-
-  public Algorithm(IOperator a_Head, IEnumerable<IOperator> a_Body, IOperator? a_Tail)
-  {
-    Head = a_Head;
-    Body = a_Body.ToImmutableArray();
-    Tail = a_Tail;
-  }
 }
