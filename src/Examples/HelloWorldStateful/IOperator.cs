@@ -6,7 +6,4 @@ using System.Text;
 
 namespace HelloWorldStateful;
 [GTS11n] // ensures that any implementation is serialisable
-public interface IOperator
-{
-  void Execute(StringBuilder a_State);
-}
+public interface IOperator { void Execute(StringBuilder a_State); }

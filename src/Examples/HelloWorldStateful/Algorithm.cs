@@ -7,7 +7,7 @@ using System.Text;
 
 namespace HelloWorldStateful;
 
-public partial class Algorithm
+public partial class Algorithm : IOperator
 {
   [GTS11n(Instance=true, Required=true)]
   public IOperator Head { get; set; }
@@ -23,6 +23,13 @@ public partial class Algorithm
     foreach( var op in Body) op.Execute(rval);
     Tail?.Execute(rval);
     return rval;
+  }
+
+  public void Execute(StringBuilder a_State)
+  {
+    Head.Execute(a_State);
+    foreach( var op in Body) op.Execute(a_State);
+    Tail?.Execute(a_State);
   }
 }
 
