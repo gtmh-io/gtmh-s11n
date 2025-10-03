@@ -2,7 +2,7 @@
 
 A lightweight, attribute-based serialization library for C# that enables easy configuration and instantiation of polymorphic object graphs through simple key-value pairs.
 
-A windows GUI for user space configuration of whatever it is you want to configure.
+A Windows GUI for user space configuration of whatever it is you want to configure.
 
 ## What is GTMH.S11n?
 
