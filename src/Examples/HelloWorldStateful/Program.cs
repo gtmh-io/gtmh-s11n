@@ -2,6 +2,8 @@
 
 using HelloWorldStateful;
 
+using System.Text;
+
 var cfg = new DictionaryConfig()
 {
   {"Head", "HelloWorldStateful.Say" },
@@ -19,5 +21,7 @@ var cfg = new DictionaryConfig()
 };
 
 var algo = new Algorithm(cfg.ForInit());
-Console.WriteLine(algo.Execute());
+var state = new StringBuilder();
+algo.Execute(state);
+Console.WriteLine(state);
 

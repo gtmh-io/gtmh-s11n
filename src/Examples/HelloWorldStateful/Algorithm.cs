@@ -16,15 +16,6 @@ public partial class Algorithm : IOperator
   [GTS11n(Instance=true)]
   public IOperator ? Tail { get; }
 
-  public StringBuilder Execute()
-  {
-    var rval = new StringBuilder();
-    Head.Execute(rval);
-    foreach( var op in Body) op.Execute(rval);
-    Tail?.Execute(rval);
-    return rval;
-  }
-
   public void Execute(StringBuilder a_State)
   {
     Head.Execute(a_State);
