@@ -26,7 +26,7 @@ public partial class EOM : IOperator { public void Execute(StringBuilder a_State
 
 public partial class WithContent
 {
-  [GTS11n(Required = true)]
+  [GTS11n(Required = true)] // let's have this serialised
   public string Value { get; private set; }
 }
 
