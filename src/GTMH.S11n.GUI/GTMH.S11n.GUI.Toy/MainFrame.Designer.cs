@@ -30,9 +30,9 @@ partial class MainFrame
   {
     menuStrip1 = new MenuStrip();
     fileToolStripMenuItem = new ToolStripMenuItem();
+    setObjectTypeToolStripMenuItem = new ToolStripMenuItem();
     m_StatusStrip = new StatusStrip();
     m_S11nView = new GenericS11nControl();
-    setObjectTypeToolStripMenuItem = new ToolStripMenuItem();
     menuStrip1.SuspendLayout();
     SuspendLayout();
     // 
@@ -52,6 +52,14 @@ partial class MainFrame
     fileToolStripMenuItem.Size = new Size(37, 20);
     fileToolStripMenuItem.Text = "&File";
     // 
+    // setObjectTypeToolStripMenuItem
+    // 
+    setObjectTypeToolStripMenuItem.Name = "setObjectTypeToolStripMenuItem";
+    setObjectTypeToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.O;
+    setObjectTypeToolStripMenuItem.Size = new Size(199, 22);
+    setObjectTypeToolStripMenuItem.Text = "Set &Object Type";
+    setObjectTypeToolStripMenuItem.Click += setObjectTypeToolStripMenuItem_Click;
+    // 
     // m_StatusStrip
     // 
     m_StatusStrip.Location = new Point(0, 428);
@@ -67,13 +75,6 @@ partial class MainFrame
     m_S11nView.Name = "m_S11nView";
     m_S11nView.Size = new Size(800, 404);
     m_S11nView.TabIndex = 2;
-    // 
-    // setObjectTypeToolStripMenuItem
-    // 
-    setObjectTypeToolStripMenuItem.Name = "setObjectTypeToolStripMenuItem";
-    setObjectTypeToolStripMenuItem.Size = new Size(180, 22);
-    setObjectTypeToolStripMenuItem.Text = "Set &Object Type";
-    setObjectTypeToolStripMenuItem.Click += setObjectTypeToolStripMenuItem_Click;
     // 
     // MainFrame
     // 

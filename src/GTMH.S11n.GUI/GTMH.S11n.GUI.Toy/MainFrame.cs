@@ -21,7 +21,7 @@ public partial class MainFrame : Form
     base.OnFormClosing(e);
   }
 
-  private void setObjectTypeToolStripMenuItem_Click(object sender, EventArgs e)
+  private void setObjectTypeToolStripMenuItem_Click(object sender, EventArgs ea)
   {
     var dlg = new OpenFileDialog();
     dlg.Filter = ".Net Assembly|*.exe;*.dll";
@@ -30,5 +30,14 @@ public partial class MainFrame : Form
       if ( dlg.ShowDialog(this) != DialogResult.OK )  return;
       ll.Commit();
     }
+    try
+    {
+      var ass = System.Reflection.Assembly.LoadFrom(dlg.FileName);
+    }
+    catch(Exception e)
+    {
+      this.ShowErrorDialog($"Error: {e.Message}");
+    }
   }
+  //public static IEnumerable<string> FindInstantiable(
 }
