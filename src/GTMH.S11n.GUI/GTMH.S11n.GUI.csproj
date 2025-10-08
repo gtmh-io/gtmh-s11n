@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <OutputPath>vsbin/$(Configuration)</OutputPath>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="GTMH.S11n.GUI.Toy\**" />
+    <Compile Remove="vsbin\**" />
+    <EmbeddedResource Remove="GTMH.S11n.GUI.Toy\**" />
+    <EmbeddedResource Remove="vsbin\**" />
+    <None Remove="GTMH.S11n.GUI.Toy\**" />
+    <None Remove="vsbin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GTMH.Windows" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>
