@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace GTMH.S11n.FieldTypes
 {
-  public class EnumField : IFieldType
+  public class EnumField : PODField
   {
-    public readonly string Name;
     public readonly string Type;
-    public readonly GTFieldAttrs Attrs;
-    public EnumField(string a_Name, string a_Type, GTFieldAttrs a_Attrs)
+    public EnumField(string a_Name, string a_Type, GTFieldAttrs a_Attrs, string a_Default): base(a_Name, a_Attrs, Clean(a_Default))
     {
-      this.Name = a_Name;
       Type = a_Type;
-      Attrs = a_Attrs;
     }
 
-    public void WriteGather(Code code)
+    static string Clean(string a_DefaultValue) => a_DefaultValue.Split('.').Last();
+
+    public override void WriteGather(Code code)
     {
       code.WriteLine($"a_Args.Add(\"{this.Name}\", {this.Name}.ToString());");
     }
 
-    public void WriteInitialisation(Code code)
+    public override void WriteInitialisation(Code code)
     {
       code.WriteLine("{");
       using(code.Indent())
@@ -40,11 +39,6 @@ namespace GTMH.S11n.FieldTypes
         code.WriteLine($"else throw new ArgumentException(\"Could not convert to {this.Type}\");");
       }
       code.WriteLine("}");
-    }
-
-    public void WriteVisitation(Code code)
-    {
-      code.WriteLine($"a_Visitor.VisitMember(\"{this.Name}\", {Attrs.Required.ToString().ToLower()});");
     }
   }
 }

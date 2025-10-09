@@ -233,12 +233,46 @@ namespace GTMH.S11n
       return rval;
     }
 
-    private static IFieldType ParseAttribute(IPropertySymbol property, INamedTypeSymbol a_Container, AttributeData a_AttrData) => ParseAttribute(property.Name, property.Type, a_Container, a_AttrData);
+    private static IFieldType ParseAttribute(IPropertySymbol property, INamedTypeSymbol a_Container, AttributeData a_AttrData) => ParseAttribute(property.Name, property.Type, a_Container, a_AttrData, GetDefault(property));
 
-    private static IFieldType ParseAttribute(IFieldSymbol field, INamedTypeSymbol a_Container, AttributeData a_AttrData) => ParseAttribute(field.Name, field.Type, a_Container, a_AttrData);
+    private static IFieldType ParseAttribute(IFieldSymbol field, INamedTypeSymbol a_Container, AttributeData a_AttrData) => ParseAttribute(field.Name, field.Type, a_Container, a_AttrData, GetDefault(field));
+
+    private static string GetDefault(IFieldSymbol fieldSymbol)
+    {
+      if(fieldSymbol.DeclaringSyntaxReferences.Length > 0)
+      {
+        var syntax = fieldSymbol.DeclaringSyntaxReferences[0].GetSyntax();
+        if(syntax is VariableDeclaratorSyntax variableDeclarator)
+        {
+          var initializer = variableDeclarator.Initializer;
+          if ( initializer != null )
+          {
+            return initializer.Value.ToString();
+          }
+        }
+      }
+      return null;
+    }
+
+    private static string GetDefault(IPropertySymbol propertySymbol)
+    {
+      if(propertySymbol.DeclaringSyntaxReferences.Length > 0)
+      {
+        var syntax = propertySymbol.DeclaringSyntaxReferences[0].GetSyntax();
+        if(syntax is PropertyDeclarationSyntax propertyDeclaration)
+        {
+          var initializer = propertyDeclaration.Initializer;
+          if ( initializer != null )
+          {
+            return initializer.Value.ToString();
+          }
+        }
+      }
+      return null;
+    }
 
     static readonly Regex REArray= new Regex("System.Collections.Immutable.ImmutableArray<.*>");
-    private static IFieldType ParseAttribute(string a_Name, ITypeSymbol a_Type, INamedTypeSymbol a_Container, AttributeData a_AttrData)
+    private static IFieldType ParseAttribute(string a_Name, ITypeSymbol a_Type, INamedTypeSymbol a_Container, AttributeData a_AttrData, string a_DefaultRepresentation)
     {
       var attr = RealiseAttribute(a_AttrData);
       if(attr.Instance)
@@ -261,21 +295,20 @@ namespace GTMH.S11n
       }
       else if(attr.Parse != null || attr.DeParse != null)
       {
-        return new CustomField(a_Name, attr);
+        return new CustomField(a_Name, attr, a_DefaultRepresentation);
       }
       switch(a_Type.TypeKind)
       {
         case TypeKind.Enum:
         {
-          return new EnumField(a_Name, a_Type.ToDisplayString(), attr);
+          return new EnumField(a_Name, a_Type.ToDisplayString(), attr, a_DefaultRepresentation);
         }
         default:
         {
-          return new TryParseField(a_Name, a_Type.Name, attr);
+          return new TryParseField(a_Name, a_Type.Name, attr, a_DefaultRepresentation);
         }
       }
     }
-
 
     private static string GetVisibility(SyntaxTokenList modifiers, bool a_IsNested)
     {

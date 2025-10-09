@@ -4,19 +4,15 @@ using System.Text;
 
 namespace GTMH.S11n.FieldTypes
 {
-  public class TryParseField : IFieldType
+  public class TryParseField : PODField
   {
     public readonly string Type;
-    public readonly string Name;
-    public readonly GTFieldAttrs Attrs;
-    public TryParseField(string a_Name, String a_Type, GTFieldAttrs a_Attrs)
+    public TryParseField(string a_Name, String a_Type, GTFieldAttrs a_Attrs, string a_Default) : base(a_Name, a_Attrs, a_Default)
     {
-      Name = a_Name;
       Type =a_Type;
-      Attrs = a_Attrs;
     }
 
-    public void WriteGather(Code code)
+    public override void WriteGather(Code code)
     {
       switch(Type)
       {
@@ -33,7 +29,7 @@ namespace GTMH.S11n.FieldTypes
       }
     }
 
-    public void WriteInitialisation(Code code)
+    public override void WriteInitialisation(Code code)
     {
       switch(Type)
       {
@@ -78,11 +74,6 @@ namespace GTMH.S11n.FieldTypes
           break;
         }
       }
-    }
-
-    public void WriteVisitation(Code code)
-    {
-      code.WriteLine($"a_Visitor.VisitMember(\"{this.Name}\", {Attrs.Required.ToString().ToLower()});");
     }
   }
 }

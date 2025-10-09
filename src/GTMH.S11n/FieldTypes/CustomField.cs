@@ -4,23 +4,17 @@ using System.Text;
 
 namespace GTMH.S11n.FieldTypes
 {
-  internal class CustomField : IFieldType
+  internal class CustomField : PODField
   {
-    private readonly string Name;
-    private readonly GTFieldAttrs Attrs;
 
-    public CustomField(string Name, GTFieldAttrs a_Attrs)
-    {
-      this.Name = Name;
-      this.Attrs = a_Attrs;
-    }
+    public CustomField(string Name, GTFieldAttrs a_Attrs, string a_Default) : base(Name, a_Attrs, a_Default) { }
 
-    public void WriteGather(Code code)
+    public override void WriteGather(Code code)
     {
       code.WriteLine($"a_Args.Add(\"{this.Name}\", {Attrs.DeParse}({this.Name}));");
     }
 
-    public void WriteInitialisation(Code code)
+    public override void WriteInitialisation(Code code)
     {
       if(Attrs.AKA == null)
       {
@@ -37,11 +31,6 @@ namespace GTMH.S11n.FieldTypes
         }
         code.WriteLine("}");
       }
-    }
-
-    public void WriteVisitation(Code code)
-    {
-      code.WriteLine($"a_Visitor.VisitMember(\"{this.Name}\", {Attrs.Required.ToString().ToLower()});");
     }
   }
 }
