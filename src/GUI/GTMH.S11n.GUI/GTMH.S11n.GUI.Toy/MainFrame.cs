@@ -1,3 +1,5 @@
+using GTMH.S11n.Reflection;
+
 using System.ComponentModel;
 using System.Reflection;
 
@@ -32,22 +34,23 @@ public partial class MainFrame : Form
       ll.Commit();
     }
 
-    Assembly ass;
+    string [] ible;
     try
     {
-      ass = System.Reflection.Assembly.LoadFrom(dlg.FileName);
+      ible = Instantiable.Find(dlg.FileName, null ).ToArray();
     }
     catch(Exception e)
     {
       this.ShowErrorDialog($"Error: {e.Message}");
       return;
     }
-    var ic =new InstantiableControl(ass, null);
-    if(!ic.Any())
+    if(!ible.Any())
     {
       this.ShowInfoDialog("The selected assembly contained no instantiable types");
       return;
     }
+
+    var clsDlg  = new ClassDialog(ible);
+    if ( clsDlg.ShowDialog(this) != DialogResult.OK) return;
   }
-  //public static IEnumerable<string> FindInstantiable(
 }
