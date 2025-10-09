@@ -26,4 +26,8 @@
     <PackageReference Include="GTMH.Windows" Version="1.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\GTMH.S11n\GTMH.S11n.csproj" />
+  </ItemGroup>
+
 </Project>

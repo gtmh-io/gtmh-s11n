@@ -28,5 +28,8 @@ namespace GTMH.S11n.GUI.Toy
       }
       base.OnFormClosing(e);
     }
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+    public string SelectedItem => (string)m_Classes.SelectedItem; // shouldn't be calling this if cxl
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
   }
 }

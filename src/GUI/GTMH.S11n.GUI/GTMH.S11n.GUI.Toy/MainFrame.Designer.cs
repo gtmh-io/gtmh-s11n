@@ -32,7 +32,7 @@ partial class MainFrame
     fileToolStripMenuItem = new ToolStripMenuItem();
     setObjectTypeToolStripMenuItem = new ToolStripMenuItem();
     m_StatusStrip = new StatusStrip();
-    m_S11nView = new GenericS11nControl();
+    m_View = new GenericS11nControl();
     menuStrip1.SuspendLayout();
     SuspendLayout();
     // 
@@ -68,20 +68,20 @@ partial class MainFrame
     m_StatusStrip.TabIndex = 1;
     m_StatusStrip.Text = "statusStrip1";
     // 
-    // m_S11nView
+    // m_View
     // 
-    m_S11nView.Dock = DockStyle.Fill;
-    m_S11nView.Location = new Point(0, 24);
-    m_S11nView.Name = "m_S11nView";
-    m_S11nView.Size = new Size(800, 404);
-    m_S11nView.TabIndex = 2;
+    m_View.Dock = DockStyle.Fill;
+    m_View.Location = new Point(0, 24);
+    m_View.Name = "m_View";
+    m_View.Size = new Size(800, 404);
+    m_View.TabIndex = 2;
     // 
     // MainFrame
     // 
     AutoScaleDimensions = new SizeF(7F, 15F);
     AutoScaleMode = AutoScaleMode.Font;
     ClientSize = new Size(800, 450);
-    Controls.Add(m_S11nView);
+    Controls.Add(m_View);
     Controls.Add(m_StatusStrip);
     Controls.Add(menuStrip1);
     MainMenuStrip = menuStrip1;
@@ -98,6 +98,6 @@ partial class MainFrame
   private MenuStrip menuStrip1;
   private ToolStripMenuItem fileToolStripMenuItem;
   private StatusStrip m_StatusStrip;
-  private GenericS11nControl m_S11nView;
+  private GenericS11nControl m_View;
   private ToolStripMenuItem setObjectTypeToolStripMenuItem;
 }

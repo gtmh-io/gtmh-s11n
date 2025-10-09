@@ -18,7 +18,12 @@ namespace GTMH.S11n.GUI
       this.RootNode = m_TreeView.Nodes[0];
     }
 
-    private void SetView(Control a_Control)
+    public void SetView(string a_Assembly, string a_Class)
+    {
+      m_TreeView.Nodes[0].Text=a_Class.Split('.').Last();
+    }
+
+    private void SetLeft(Control a_Control)
     {
       m_SplitContainer.Panel2.Controls.Clear();
       a_Control.Dock = DockStyle.Fill;

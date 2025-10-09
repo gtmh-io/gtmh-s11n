@@ -52,5 +52,7 @@ public partial class MainFrame : Form
 
     var clsDlg  = new ClassDialog(ible);
     if ( clsDlg.ShowDialog(this) != DialogResult.OK) return;
+
+    m_View.SetView(dlg.FileName, clsDlg.SelectedItem);
   }
 }
