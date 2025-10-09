@@ -37,26 +37,30 @@
       // 
       // groupBox1
       // 
+      groupBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
       groupBox1.Controls.Add(m_Classes);
       groupBox1.Location = new Point(11, 8);
       groupBox1.Name = "groupBox1";
-      groupBox1.Size = new Size(241, 55);
+      groupBox1.Size = new Size(334, 55);
       groupBox1.TabIndex = 0;
       groupBox1.TabStop = false;
       groupBox1.Text = "Class";
       // 
       // m_Classes
       // 
+      m_Classes.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+      m_Classes.DropDownStyle = ComboBoxStyle.DropDownList;
       m_Classes.FormattingEnabled = true;
       m_Classes.Location = new Point(6, 22);
       m_Classes.Name = "m_Classes";
-      m_Classes.Size = new Size(229, 23);
+      m_Classes.Size = new Size(322, 23);
       m_Classes.TabIndex = 0;
       // 
       // m_CancelButton
       // 
+      m_CancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
       m_CancelButton.DialogResult = DialogResult.Cancel;
-      m_CancelButton.Location = new Point(188, 69);
+      m_CancelButton.Location = new Point(281, 69);
       m_CancelButton.Name = "m_CancelButton";
       m_CancelButton.Size = new Size(58, 22);
       m_CancelButton.TabIndex = 1;
@@ -65,8 +69,9 @@
       // 
       // m_OKButton
       // 
+      m_OKButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
       m_OKButton.DialogResult = DialogResult.OK;
-      m_OKButton.Location = new Point(124, 69);
+      m_OKButton.Location = new Point(217, 69);
       m_OKButton.Name = "m_OKButton";
       m_OKButton.Size = new Size(58, 22);
       m_OKButton.TabIndex = 1;
@@ -79,11 +84,11 @@
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
       CancelButton = m_CancelButton;
-      ClientSize = new Size(254, 95);
+      ClientSize = new Size(347, 95);
       Controls.Add(m_OKButton);
       Controls.Add(m_CancelButton);
       Controls.Add(groupBox1);
-      FormBorderStyle = FormBorderStyle.FixedDialog;
+      FormBorderStyle = FormBorderStyle.SizableToolWindow;
       MaximizeBox = false;
       MinimizeBox = false;
       Name = "ClassDialog";

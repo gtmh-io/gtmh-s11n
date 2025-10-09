@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.Loader;
 using System.Text;
 
@@ -10,18 +11,23 @@ public class Instantiable
   public static IEnumerable<string> Find(string a_AssemblyFile, Type? a_WithInterface)
   {
     if ( a_WithInterface!=null && ! a_WithInterface.IsInterface ) throw new ArgumentException("Expect and test against interface type");
-    AssemblyLoadContext context = new AssemblyLoadContext(null, true );
+    var context = new DependencyResolvingLoadContext(a_AssemblyFile);
     try
     {
       var ass = context.LoadFromAssemblyPath(a_AssemblyFile);
-      // look for matching constructor as proxy
-      // TODO this should be more robust
-      var sig = new Type[] { typeof(IGTInitArgs) };
       foreach(var type in ass.GetTypes())
       {
         if ( type.IsInterface || type.IsAbstract ) continue;
         if ( a_WithInterface != null && !type.GetInterfaces().Contains(a_WithInterface) ) continue;
-        var c = type.GetConstructor(sig);
+        // look for matching constructor as proxy
+        // TODO this should be more robust
+        Func<ParameterInfo[],bool> isMatchSig = parameters=>
+        {
+          if ( parameters.Length != 1 ) return false;
+          return parameters[0].ParameterType.FullName==typeof(IGTInitArgs).FullName; // can't rely on compare capital T type
+        };
+        var c = type.GetConstructors(System.Reflection.BindingFlags.Public|System.Reflection.BindingFlags.Instance).Where(_=>isMatchSig(_.GetParameters())).SingleOrDefault();
+        
         if ( c != null ) yield return type.FullName ?? type.Name; 
       }
     }
