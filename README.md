@@ -2,6 +2,8 @@
 
 A lightweight, attribute-based serialization library for C# that enables easy configuration and instantiation of polymorphic object graphs through simple key-value pairs.
 
+A Windows GUI for user space configuration of whatever it is you want to configure.
+
 ## What is GTMH.S11n?
 
 GTMH.S11n (serialization) provides a clean, declarative way to serialize and deserialize complex object hierarchies, with special support for:
@@ -26,7 +28,7 @@ public partial class EOM : IOperator { public void Execute(StringBuilder a_State
 
 public partial class WithContent
 {
-  [GTS11n(Required = true)]
+  [GTS11n(Required = true)] // let's have this serialised
   public string Value { get; private set; }
 }
 
