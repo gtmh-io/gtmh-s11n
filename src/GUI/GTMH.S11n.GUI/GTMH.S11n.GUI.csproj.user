@@ -4,5 +4,8 @@
     <Compile Update="GenericS11nControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="InstantiableControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

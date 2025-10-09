@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Reflection;
 
 namespace GTMH.S11n.GUI.Toy;
 
@@ -30,13 +31,22 @@ public partial class MainFrame : Form
       if ( dlg.ShowDialog(this) != DialogResult.OK )  return;
       ll.Commit();
     }
+
+    Assembly ass;
     try
     {
-      var ass = System.Reflection.Assembly.LoadFrom(dlg.FileName);
+      ass = System.Reflection.Assembly.LoadFrom(dlg.FileName);
     }
     catch(Exception e)
     {
       this.ShowErrorDialog($"Error: {e.Message}");
+      return;
+    }
+    var ic =new InstantiableControl(ass, null);
+    if(!ic.Any())
+    {
+      this.ShowInfoDialog("The selected assembly contained no instantiable types");
+      return;
     }
   }
   //public static IEnumerable<string> FindInstantiable(

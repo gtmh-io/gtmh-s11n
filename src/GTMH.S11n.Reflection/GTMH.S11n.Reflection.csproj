@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>preview</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputPath>vsbin/$(Configuration)</OutputPath>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <Compile Remove="GTMH.S11n.Reflection.UnitTests\**" />
+    <Compile Remove="vsbin\**" />
+    <EmbeddedResource Remove="GTMH.S11n.Reflection.UnitTests\**" />
+    <EmbeddedResource Remove="vsbin\**" />
+    <None Remove="GTMH.S11n.Reflection.UnitTests\**" />
+    <None Remove="vsbin\**" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\GTMH.S11n\GTMH.S11n.csproj" />
+  </ItemGroup>
+
+</Project>
