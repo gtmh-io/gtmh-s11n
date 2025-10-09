@@ -145,10 +145,6 @@ namespace GTMH.S11n
     private static bool SeekImplementsInterface(INamedTypeSymbol classSymbol, GeneratorSyntaxContext ctx)
     {
       if ( classSymbol == null ) return false;
-      if(classSymbol.Name.Contains("HasNotGTFieldsImplementsInterface"))
-      {
-        //System.Diagnostics.Debugger.Launch();
-      }
       var interfaces = classSymbol.AllInterfaces;
       foreach(var iface in interfaces)
       {
@@ -158,12 +154,12 @@ namespace GTMH.S11n
       return SeekImplementsInterface(classSymbol.BaseType, ctx);
     }
 
-    private static bool SeekGTFieldParents(INamedTypeSymbol baseType)
+    private static string SeekGTFieldParents(INamedTypeSymbol baseType)
     {
-      if ( baseType == null ) return false;
-      else if ( baseType.SpecialType == SpecialType.System_Object ) return false;
+      if ( baseType == null ) return null;
+      else if ( baseType.SpecialType == SpecialType.System_Object ) return null;
       var attrs = ParseGTFields(baseType);
-      if ( attrs.Any() ) return true;
+      if ( attrs.Any() ) return baseType.ToDisplayString();
       else return SeekGTFieldParents(baseType.BaseType);
     }
 
@@ -234,32 +230,9 @@ namespace GTMH.S11n
       return rval;
     }
 
-    private static IFieldType ParseAttribute(IPropertySymbol property, INamedTypeSymbol a_Container, AttributeData a_AttrData)
-    {
-      return ParseAttribute(property.Name, property.Type, a_Container, a_AttrData);
-    }
+    private static IFieldType ParseAttribute(IPropertySymbol property, INamedTypeSymbol a_Container, AttributeData a_AttrData) => ParseAttribute(property.Name, property.Type, a_Container, a_AttrData);
 
-    private static IFieldType ParseAttribute(IFieldSymbol field, INamedTypeSymbol a_Container, AttributeData a_AttrData)
-    {
-      return ParseAttribute(field.Name, field.Type, a_Container, a_AttrData);
-    }
-
-    static ITypeSymbol GetInstanceType(ISymbol a_Symbol)
-    {
-      if(a_Symbol is IPropertySymbol property)
-      {
-        return property.Type;
-      }
-      else if(a_Symbol is IFieldSymbol field)
-      {
-        return field.Type;
-      }
-      else
-      {
-        throw new ArgumentException("Invalid type for instance");
-
-      }
-    }
+    private static IFieldType ParseAttribute(IFieldSymbol field, INamedTypeSymbol a_Container, AttributeData a_AttrData) => ParseAttribute(field.Name, field.Type, a_Container, a_AttrData);
 
     static readonly Regex REArray= new Regex("System.Collections.Immutable.ImmutableArray<.*>");
     private static IFieldType ParseAttribute(string a_Name, ITypeSymbol a_Type, INamedTypeSymbol a_Container, AttributeData a_AttrData)
@@ -397,6 +370,7 @@ namespace GTMH.S11n
       {
         WriteConstructors(a_Defn, code);
         WriteS11n(a_Defn, code);
+        WriteVisitor(a_Defn, code);
       }
       code.WriteLine("}");
       code.WriteLine("#nullable restore");
@@ -459,6 +433,17 @@ namespace GTMH.S11n
           }
         }
         code.WriteLine("}");
+      }
+    }
+    private static void WriteVisitor(S11nClassDefn a_Defn, Code code)
+    {
+      if(a_Defn.HasGTParent)
+      {
+        code.WriteLine("public static new void S11nVisit() { }");
+      }
+      else
+      {
+        code.WriteLine("public static void S11nVisit() { }");
       }
     }
   }
