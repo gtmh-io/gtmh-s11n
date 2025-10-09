@@ -92,7 +92,7 @@ namespace GTMH.S11n.FieldTypes
 
     public void WriteVisitation(Code code)
     {
-      code.WriteLine($"a_Visitor.VisitInstance(\"{this.Name}\", {Attrs.Required.ToString().ToLower()});");
+      code.WriteLine($"a_Visitor.VisitInstance(\"{this.Name}\", \"{InterfaceType.Replace("?", "")}\", {Attrs.Required.ToString().ToLower()});");
     }
   }
 }
