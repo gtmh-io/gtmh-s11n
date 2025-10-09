@@ -96,15 +96,14 @@ namespace GTMH.S11n
       var classSymbol = ctx.SemanticModel.GetDeclaredSymbol(cls);
       if ( classSymbol == null ) return null;
 
-
       bool topLevel = IsTopLevelS11n(classSymbol);
 
       var attrs=ParseGTFields(classSymbol);
 
       // need to check if any parent classes have GTFields
-      var isGTDerived = SeekGTFieldParents(classSymbol.BaseType);
+      var isGTDerived = SeekParent(classSymbol.BaseType);
 
-      var implements = attrs.Any() || topLevel||isGTDerived || SeekImplementsInterface(classSymbol, ctx);
+      var implements = attrs.Any() || topLevel || isGTDerived || SeekImplementsInterface(classSymbol);
 
       if(!attrs.Any()&&!isGTDerived&&!topLevel&&!implements)
       {
@@ -119,7 +118,8 @@ namespace GTMH.S11n
       {
         usings.Add(use.ToString());
       }
-      return new S11nClassDefn(usings, ns, GetVisibility(cls.Modifiers, cls.Parent is TypeDeclarationSyntax), classSymbol.Name, attrs, isGTDerived, constructors.Any());
+      var gtParent = isGTDerived ? ctx.SemanticModel.GetDeclaredSymbol(cls.Parent).ToDisplayString() : null;
+      return new S11nClassDefn(usings, ns, GetVisibility(cls.Modifiers, cls.Parent is TypeDeclarationSyntax), classSymbol.Name, attrs, gtParent, constructors.Any());
     }
 
     private static List<IMethodSymbol> ParseCustomConstructors(INamedTypeSymbol classSymbol)
@@ -142,7 +142,7 @@ namespace GTMH.S11n
       return rval;
     }
 
-    private static bool SeekImplementsInterface(INamedTypeSymbol classSymbol, GeneratorSyntaxContext ctx)
+    private static bool SeekImplementsInterface(INamedTypeSymbol classSymbol, bool recurse=true)
     {
       if ( classSymbol == null ) return false;
       var interfaces = classSymbol.AllInterfaces;
@@ -151,16 +151,19 @@ namespace GTMH.S11n
         var gtfAttr = iface.GetAttributes().FirstOrDefault(attr => attr.AttributeClass?.ToDisplayString() == "GTMH.S11n.GTS11nAttribute");
         if ( gtfAttr != null ) return true;
       }
-      return SeekImplementsInterface(classSymbol.BaseType, ctx);
+      if ( recurse) return SeekImplementsInterface(classSymbol.BaseType);
+      else return false;
     }
 
-    private static string SeekGTFieldParents(INamedTypeSymbol baseType)
+    private static bool SeekParent(INamedTypeSymbol baseType)
     {
-      if ( baseType == null ) return null;
-      else if ( baseType.SpecialType == SpecialType.System_Object ) return null;
+      if ( baseType == null ) return false;
+      else if ( baseType.SpecialType == SpecialType.System_Object ) return false;
+      // UT TestDerivedImplementsInterface
+      if( SeekImplementsInterface(baseType, false) )return true;
       var attrs = ParseGTFields(baseType);
-      if ( attrs.Any() ) return baseType.ToDisplayString();
-      else return SeekGTFieldParents(baseType.BaseType);
+      if ( attrs.Any() ) return true;
+      else return SeekParent(baseType.BaseType);
     }
 
     private static GTFieldAttrs RealiseAttribute(AttributeData gtfAttr)

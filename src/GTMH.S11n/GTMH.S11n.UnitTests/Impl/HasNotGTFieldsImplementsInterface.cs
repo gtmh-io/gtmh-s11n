@@ -14,4 +14,8 @@ namespace GTMH.S11n.UnitTests.Impl
     public HasNotGTFieldsImplementsInterface() { }
     public void Execute() { }
   }
+  public partial class DerivesHasNotGTFieldsImplementsInterface : HasNotGTFieldsImplementsInterface
+  {
+    public DerivesHasNotGTFieldsImplementsInterface() { }
+  }
 }
