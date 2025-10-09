@@ -118,7 +118,7 @@ namespace GTMH.S11n
       {
         usings.Add(use.ToString());
       }
-      var gtParent = isGTDerived ? ctx.SemanticModel.GetDeclaredSymbol(cls.Parent).ToDisplayString() : null;
+      var gtParent = isGTDerived ? classSymbol.BaseType.ToDisplayString(): null;
       return new S11nClassDefn(usings, ns, GetVisibility(cls.Modifiers, cls.Parent is TypeDeclarationSyntax), classSymbol.Name, attrs, gtParent, constructors.Any());
     }
 
@@ -383,7 +383,7 @@ namespace GTMH.S11n
     private static void WriteS11n(S11nClassDefn a_Defn, Code code)
     {
       var modifier = a_Defn.HasGTParent ? "override" : "virtual";
-      code.WriteLine($"public {modifier} Dictionary<string,string> ParseS11n()");
+      code.WriteLine($"public {modifier} Dictionary<string,string> S11nParse()");
       code.WriteLine("{");
       using(code.Indent())
       {
@@ -442,11 +442,30 @@ namespace GTMH.S11n
     {
       if(a_Defn.HasGTParent)
       {
-        code.WriteLine("public static new void S11nVisit() { }");
+        code.WriteLine("public static new void S11nVisit(GTMH.S11n.IS11nVisitor a_Visitor)");
+        code.WriteLine("{");
+        using(code.Indent())
+        {
+          code.WriteLine($"{a_Defn.Parent}.S11nVisit(a_Visitor);");
+          foreach(var attr in a_Defn.Fields)
+          {
+            attr.WriteVisitation(code);
+          }
+        }
+        code.WriteLine("}");
       }
       else
       {
-        code.WriteLine("public static void S11nVisit() { }");
+        code.WriteLine("public static void S11nVisit(GTMH.S11n.IS11nVisitor a_Visitor)");
+        code.WriteLine("{");
+        using(code.Indent())
+        {
+          foreach(var attr in a_Defn.Fields)
+          {
+            attr.WriteVisitation(code);
+          }
+        }
+        code.WriteLine("}");
       }
     }
   }

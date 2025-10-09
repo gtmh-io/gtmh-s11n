@@ -8,5 +8,6 @@ namespace GTMH.S11n.FieldTypes
   {
     void WriteGather(Code code);
     void WriteInitialisation(Code code);
+    void WriteVisitation(Code code);
   }
 }

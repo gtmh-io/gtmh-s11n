@@ -41,5 +41,10 @@ namespace GTMH.S11n.FieldTypes
       }
       code.WriteLine("}");
     }
+
+    public void WriteVisitation(Code code)
+    {
+      code.WriteLine($"a_Visitor.VisitMember(\"{this.Name}\", {Attrs.Required.ToString().ToLower()});");
+    }
   }
 }
