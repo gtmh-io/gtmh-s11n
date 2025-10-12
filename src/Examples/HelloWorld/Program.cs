@@ -1,4 +1,5 @@
 ﻿using GTMH.S11n;
+using GTMH.S11n.TypeResolution;
 
 using HelloWorld;
 
@@ -18,7 +19,7 @@ var cfg = new DictionaryConfig()
   {"Tail", "HelloWorld.EOM" }
 };
 
-var algo = new Algorithm(cfg.ForInit());
+var algo = new Algorithm(cfg.ForInit(new CurrLoadedAssemblies()));
 
 algo.Head.Execute();
 foreach(var op in algo.Body ) op.Execute();

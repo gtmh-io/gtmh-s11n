@@ -1,4 +1,5 @@
 ﻿using GTMH.S11n;
+using GTMH.S11n.TypeResolution;
 
 using HelloWorldStateful;
 
@@ -20,7 +21,7 @@ var cfg = new DictionaryConfig()
   {"Tail", "HelloWorldStateful.EOM" }
 };
 
-var algo = new Algorithm(cfg.ForInit());
+var algo = new Algorithm(cfg.ForInit(new CurrLoadedAssemblies()));
 var state = new StringBuilder();
 algo.Execute(state);
 Console.WriteLine(state);

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Text;
 
 namespace GTMH.S11n.Reflection.UnitTests.LibB;
@@ -9,4 +10,8 @@ public partial class LibBInterfaceImpl : LibAInterfaceType
 {
   [GTS11n]
   public string Name { get; set; } = "LibBInterfaceImpl";
+  [GTS11n(Instance = true, Required =true)]
+  LibAInterfaceType Instance { get; set; }
+  [GTS11n(Instance = true, Required = true)]
+  ImmutableArray<LibAInterfaceType> InstanceList { get; set; }
 }
