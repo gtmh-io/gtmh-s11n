@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\GTMH.S11n\GTMH.S11n.csproj" ReferenceOutputAssembly="true" OutputItemType="Analyzer" />
+    <ProjectReference Include="..\GTMH.S11n.Reflection.UnitTests.LibA\GTMH.S11n.Reflection.UnitTests.LibA.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

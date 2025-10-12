@@ -10,9 +10,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="GTMH.S11n.Reflection.UnitTests.LibA\**" />
+    <Compile Remove="GTMH.S11n.Reflection.UnitTests.LibB\**" />
     <Compile Remove="vsbin\**" />
+    <EmbeddedResource Remove="GTMH.S11n.Reflection.UnitTests.LibA\**" />
+    <EmbeddedResource Remove="GTMH.S11n.Reflection.UnitTests.LibB\**" />
     <EmbeddedResource Remove="vsbin\**" />
+    <None Remove="GTMH.S11n.Reflection.UnitTests.LibA\**" />
+    <None Remove="GTMH.S11n.Reflection.UnitTests.LibB\**" />
     <None Remove="vsbin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="packaged\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
