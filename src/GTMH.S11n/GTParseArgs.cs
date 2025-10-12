@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GTMH.S11n.TypeResolution;
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,6 +13,14 @@ namespace GTMH.S11n
 
     Stack<string> m_Context = new Stack<string>();
     string m_Prefix = "";
+
+    ITypeResolver m_TypeResolution;
+
+    public GTParseArgs(ITypeResolver a_TypeResolver)
+    {
+      if ( a_TypeResolver == null ) throw new ArgumentNullException(nameof(a_TypeResolver));
+      m_TypeResolution = a_TypeResolver;
+    }
     
     public void Add(string a_Key, string a_Value)
     {
@@ -41,10 +51,7 @@ namespace GTMH.S11n
       a_Instance.S11nGather(this);
     }
 
-    public string DisolveType(object a_Value)
-    {
-      if ( a_Value == null ) return "";
-      else return a_Value.GetType().FullName;
-    }
+    public string DisolveType(object a_Value) => m_TypeResolution.DisolveType(a_Value);
+    
   }
 }

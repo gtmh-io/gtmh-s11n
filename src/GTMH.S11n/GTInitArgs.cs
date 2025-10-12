@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GTMH.S11n.TypeResolution;
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,9 +10,11 @@ namespace GTMH.S11n
   {
     public static readonly string NoValue = Guid.NewGuid().ToString();
     private readonly IConfigProvider m_Provider;
-    public GTInitArgs(IConfigProvider a_Config)
+    private readonly ITypeResolver m_TypeResolution;
+    public GTInitArgs(IConfigProvider a_Config, ITypeResolver a_TypeResolver)
     {
       m_Provider = a_Config;
+      m_TypeResolution = a_TypeResolver;
     }
     Stack<string> m_Context = new Stack<string>();
     string m_Prefix = "";

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using GTMH.S11n.TypeResolution;
+
 namespace GTMH.S11n.UnitTests
 {
   public class GTFieldsTests
@@ -12,8 +14,8 @@ namespace GTMH.S11n.UnitTests
     public async ValueTask TestHasGTFieldsAsProperties()
     {
       var obj = new HasGTFieldsAsProperties("roger", 1974, HasGTFieldsAsProperties.Value_t.ValueB);
-      var s11n = obj.S11nParse();
-      var _obj = new HasGTFieldsAsProperties(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasGTFieldsAsProperties(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.StringValue).IsEqualTo("roger");
       await Assert.That(_obj.IntValue).IsEqualTo(1974);
       await Assert.That(_obj.EnumValue).IsEqualTo(HasGTFieldsAsProperties.Value_t.ValueB);
@@ -22,8 +24,8 @@ namespace GTMH.S11n.UnitTests
     public async ValueTask TestHasGTFieldsAsROFields()
     {
       var obj = new HasGTFieldsAsROFields("roger", 1974, HasGTFieldsAsROFields.Value_t.ValueB);
-      var s11n = obj.S11nParse();
-      var _obj = new HasGTFieldsAsROFields(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasGTFieldsAsROFields(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.StringValue).IsEqualTo("roger");
       await Assert.That(_obj.IntValue).IsEqualTo(1974);
       await Assert.That(_obj.EnumValue).IsEqualTo(HasGTFieldsAsROFields.Value_t.ValueB);
@@ -31,12 +33,12 @@ namespace GTMH.S11n.UnitTests
     [Test]
     public async ValueTask TestHasGTFields000_Default()
     {
-      var obj = new HasGTFieldsAsProperties(new DictionaryConfig().ForInit());
+      var obj = new HasGTFieldsAsProperties(new DictionaryConfig().ForInit(new CurrLoadedAssemblies()));
       await Assert.That(obj.StringValue).IsEqualTo("StringValueDefault");
       await Assert.That(obj.IntValue).IsEqualTo(69);
       await Assert.That(obj.EnumValue).IsEqualTo(HasGTFieldsAsProperties.Value_t.ValueA);
-      var s11n = obj.S11nParse();
-      var _obj = new HasGTFieldsAsProperties(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasGTFieldsAsProperties(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.StringValue).IsEqualTo("StringValueDefault");
       await Assert.That(_obj.IntValue).IsEqualTo(69);
       await Assert.That(_obj.EnumValue).IsEqualTo(HasGTFieldsAsProperties.Value_t.ValueA);
@@ -47,8 +49,8 @@ namespace GTMH.S11n.UnitTests
       var obj = new HasGTFieldsDerived("roger_derived", "roger_base");
       await Assert.That(obj.BaseStringValue).IsEqualTo("roger_base");
       await Assert.That(obj.DerivedStringValue).IsEqualTo("roger_derived");
-      var s11n = obj.S11nParse();
-      var _obj = new HasGTFieldsDerived(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasGTFieldsDerived(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.BaseStringValue).IsEqualTo("roger_base");
       await Assert.That(_obj.DerivedStringValue).IsEqualTo("roger_derived");
 
@@ -57,8 +59,8 @@ namespace GTMH.S11n.UnitTests
     public async ValueTask TestBaseDerivedNotGTFields()
     {
       var obj = new HasNotGTFieldsDerived("roger");
-      var s11n = obj.S11nParse();
-      var _obj = new HasNotGTFieldsDerived(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasNotGTFieldsDerived(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.BaseStringValue).IsEqualTo("roger");
     }
     [Test]
@@ -68,7 +70,7 @@ namespace GTMH.S11n.UnitTests
         { "OldStringProperty", "roger" },
         { "OldIntProperty", "1974" },
         { "OldEnumProperty", "ValueB" },
-      }).ForInit());
+      }).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(obj.NewStringProperty).IsEqualTo("roger");
       await Assert.That(obj.NewIntProperty).IsEqualTo(1974);
       await Assert.That(obj.NewEnumProperty).IsEqualTo(HasGTFieldsAKA.Enum_t.ValueB);
@@ -84,7 +86,7 @@ namespace GTMH.S11n.UnitTests
         { "NewStringProperty", "rabbit" },
         { "NewIntProperty", "3141" },
         { "NewEnumProperty", "ValueC" },
-      }).ForInit());
+      }).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(obj.NewStringProperty).IsEqualTo("rabbit");
       await Assert.That(obj.NewIntProperty).IsEqualTo(3141);
       await Assert.That(obj.NewEnumProperty).IsEqualTo(HasGTFieldsAKA.Enum_t.ValueC);
@@ -93,8 +95,8 @@ namespace GTMH.S11n.UnitTests
     public async ValueTask TestCustomParsing()
     {
       var obj = new HasGTFieldsCustomParse("roger", "rabbit");
-      var s11n = obj.S11nParse();
-      var _obj = new HasGTFieldsCustomParse(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasGTFieldsCustomParse(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.Id.Code).IsEqualTo("roger");
       await Assert.That(_obj.Id2.Code).IsEqualTo("rabbit");
     }
@@ -104,7 +106,7 @@ namespace GTMH.S11n.UnitTests
       var obj = new HasGTFieldsCustomParse(new DictionaryConfig(new Dictionary<string, string>{
         { "Id", "roger" },
         { "OldId2", "rabbit" }
-      }).ForInit());
+      }).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(obj.Id.Code).IsEqualTo("roger");
       await Assert.That(obj.Id2.Code).IsEqualTo("rabbit");
     }
@@ -115,7 +117,7 @@ namespace GTMH.S11n.UnitTests
         { "Id", "roger" },
         { "OldId2", "rabbit" },
         { "Id2", "beetroot" } // this should take precedence
-      }).ForInit());
+      }).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(obj.Id.Code).IsEqualTo("roger");
       await Assert.That(obj.Id2.Code).IsEqualTo("beetroot");
     }
@@ -124,8 +126,8 @@ namespace GTMH.S11n.UnitTests
     public async ValueTask TestGTInstanceBasic()
     {
       var obj = new HasGTFieldsTInstance("roger", "rabbit");
-      var s11n = obj.S11nParse();
-      var _obj = new HasGTFieldsTInstance(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasGTFieldsTInstance(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.NewInstance.NewStringProperty).IsEqualTo("roger");
       await Assert.That(_obj.OtherInstance.NewStringProperty).IsEqualTo("rabbit");
     }
@@ -139,7 +141,7 @@ namespace GTMH.S11n.UnitTests
         { "OtherInstance", "GTMH.S11n.UnitTests.Impl.InstanceType" },
         { "OtherInstance.NewStringProperty", "rabbit" },
       };
-      var _obj = new HasGTFieldsTInstance(new DictionaryConfig(s11n).ForInit());
+      var _obj = new HasGTFieldsTInstance(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.NewInstance.NewStringProperty).IsEqualTo("roger");
       await Assert.That(_obj.OtherInstance.NewStringProperty).IsEqualTo("rabbit");
     }
@@ -153,7 +155,7 @@ namespace GTMH.S11n.UnitTests
         { "OtherInstance", "GTMH.S11n.UnitTests.Impl.InstanceType" },
         { "OtherInstance.NewStringProperty", "rabbit" },
       };
-      var _obj = new HasGTFieldsTInstance(new DictionaryConfig(s11n).ForInit());
+      var _obj = new HasGTFieldsTInstance(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.NewInstance.NewStringProperty).IsEqualTo("roger");
       await Assert.That(_obj.OtherInstance.NewStringProperty).IsEqualTo("rabbit");
     }
@@ -166,7 +168,7 @@ namespace GTMH.S11n.UnitTests
         { "OtherInstance", "GTMH.S11n.UnitTests.Impl.InstanceType" },
         { "OtherInstance.NewStringProperty", "rabbit" },
       };
-      var _obj = new HasGTFieldsTInstance(new DictionaryConfig(s11n).ForInit());
+      var _obj = new HasGTFieldsTInstance(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.NewInstance.NewStringProperty).IsEqualTo("roger");
       await Assert.That(_obj.OtherInstance.NewStringProperty).IsEqualTo("rabbit");
     }
@@ -178,8 +180,8 @@ namespace GTMH.S11n.UnitTests
       await Assert.That(obj.Optional).IsNull();
       await Assert.That(obj.Required.Value).IsEqualTo("A_A");
 
-      var s11n = obj.S11nParse();
-      var _obj = new HasGTFieldsTInstanceRequired(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasGTFieldsTInstanceRequired(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.Required).IsNotNull();
       await Assert.That(_obj.Optional).IsNull();
       await Assert.That(_obj.Required.Value).IsEqualTo("A_A");
@@ -188,8 +190,8 @@ namespace GTMH.S11n.UnitTests
     public async ValueTask TestGTInstanceCustomParse()
     {
       var obj = new HasGTFieldsTInstanceNonS8bleResource("roger");
-      var s11n = obj.S11nParse();
-      var _obj = new HasGTFieldsTInstanceNonS8bleResource(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasGTFieldsTInstanceNonS8bleResource(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.Interface.S8ble).IsEqualTo("roger");
     }
     [Test]
@@ -199,7 +201,7 @@ namespace GTMH.S11n.UnitTests
         {"OldInterface", "GTMH.S11n.UnitTests.Impl.HaveNonS8bleResource" },
         {"OldInterface.S8ble", "roger" }
       };
-      var _obj = new HasGTFieldsTInstanceNonS8bleResource(new DictionaryConfig(s11n).ForInit());
+      var _obj = new HasGTFieldsTInstanceNonS8bleResource(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.Interface.S8ble).IsEqualTo("roger");
     }
     [Test]
@@ -209,8 +211,8 @@ namespace GTMH.S11n.UnitTests
       await Assert.That(obj.Instances.Length).IsEqualTo(2);
       await Assert.That(obj.Instances[0].Value).IsEqualTo("roger_A");
       await Assert.That(obj.Instances[1].Value).IsEqualTo("rabbit_B");
-      var s11n = obj.S11nParse();
-      var _obj = new HasGTFieldsTInstanceArray(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasGTFieldsTInstanceArray(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.Instances.Length).IsEqualTo(2);
       await Assert.That(_obj.Instances[0].Value).IsEqualTo("roger_A");
       await Assert.That(_obj.Instances[1].Value).IsEqualTo("rabbit_B");
@@ -219,16 +221,16 @@ namespace GTMH.S11n.UnitTests
     public async ValueTask TestGTInstanceArrayEmpty()
     {
       var obj = new HasGTFieldsTInstanceArray();
-      var s11n = obj.S11nParse();
-      var _obj = new HasGTFieldsTInstanceArray(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasGTFieldsTInstanceArray(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.Instances.Length).IsEqualTo(0);
     }
     [Test]
     public async ValueTask TestGTInstanceArrayNulls()
     {
       var obj = new HasGTFieldsTInstanceArray(new InterfaceImplA("roger"), null, new InterfaceImplB("rabbit"));
-      var s11n = obj.S11nParse();
-      var _obj = new HasGTFieldsTInstanceArray(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasGTFieldsTInstanceArray(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.Instances.Length).IsEqualTo(3);
       await Assert.That(_obj.Instances[0].Value).IsEqualTo("roger_A");
       await Assert.That(_obj.Instances[1]).IsNull();
@@ -245,7 +247,7 @@ namespace GTMH.S11n.UnitTests
         { "OldInstances.1", "GTMH.S11n.UnitTests.Impl.InterfaceImplB" },
         { "OldInstances.1.Value", "rabbit_B"}
       };
-      var _obj = new HasGTFieldsTInstanceArrayAKA(new DictionaryConfig(s11n).ForInit());
+      var _obj = new HasGTFieldsTInstanceArrayAKA(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.Instances.Length).IsEqualTo(2);
       await Assert.That(_obj.Instances[0].Value).IsEqualTo("roger_A");
       await Assert.That(_obj.Instances[1].Value).IsEqualTo("rabbit_B");
@@ -254,8 +256,8 @@ namespace GTMH.S11n.UnitTests
     public async ValueTask TestGTInstanceArrayCustomPDP()
     {
       var obj = new HasGTFieldsTInstanceArrayCustomS11n(new InterfaceImplA("roger"), null, new InterfaceImplB("rabbit"));
-      var s11n = obj.S11nParse();
-      var _obj = new HasGTFieldsTInstanceArrayCustomS11n(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasGTFieldsTInstanceArrayCustomS11n(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.Instances.Length).IsEqualTo(3);
       await Assert.That(_obj.Instances[0].Value).IsEqualTo("roger_A");
       await Assert.That(_obj.Instances[1]).IsNull();
@@ -272,7 +274,7 @@ namespace GTMH.S11n.UnitTests
         { "OldInstances.1", "GTMH.S11n.UnitTests.Impl.InterfaceImplB" },
         { "OldInstances.1.Value", "rabbit_B"}
       };
-      var _obj = new HasGTFieldsTInstanceArrayCustomS11nAKA(new DictionaryConfig(s11n).ForInit());
+      var _obj = new HasGTFieldsTInstanceArrayCustomS11nAKA(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.Instances.Length).IsEqualTo(2);
       await Assert.That(_obj.Instances[0].Value).IsEqualTo("roger_A");
       await Assert.That(_obj.Instances[1].Value).IsEqualTo("rabbit_B");
@@ -288,7 +290,7 @@ namespace GTMH.S11n.UnitTests
         { "OldInstances.2", "GTMH.S11n.UnitTests.Impl.InterfaceImplB" },
         { "OldInstances.2.Value", "rabbit_B"}
       };
-      var _obj = new HasGTFieldsTInstanceArrayCustomS11nAKA(new DictionaryConfig(s11n).ForInit());
+      var _obj = new HasGTFieldsTInstanceArrayCustomS11nAKA(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.Instances.Length).IsEqualTo(3);
       await Assert.That(_obj.Instances[0].Value).IsEqualTo("roger_A");
       await Assert.That(_obj.Instances[1]).IsNull();
@@ -299,8 +301,8 @@ namespace GTMH.S11n.UnitTests
     {
       // that this compiles is the real test
       var obj = new HasGTFieldsTInstanceArrayRequired(new InterfaceImplA("roger"), new InterfaceImplB("rabbit"));
-      var s11n = obj.S11nParse();
-      var _obj = new HasGTFieldsTInstanceArrayRequired(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasGTFieldsTInstanceArrayRequired(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(_obj.Instances.Length).IsEqualTo(2);
       await Assert.That(_obj.Instances[0].Value).IsEqualTo("roger_A");
       await Assert.That(_obj.Instances[1].Value).IsEqualTo("rabbit_B");
@@ -310,24 +312,24 @@ namespace GTMH.S11n.UnitTests
     {
       // that this compiles is the test
       var obj = new HasNotGTFields();
-      var s11n = obj.S11nParse();
-      var _obj = new HasNotGTFields(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasNotGTFields(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(obj).IsNotEqualTo(_obj);
     }
     [Test]
     public async ValueTask TestImplementsInterface()
     {
       var obj = new HasNotGTFieldsImplementsInterface();
-      var s11n = obj.S11nParse();
-      var _obj = new HasNotGTFieldsImplementsInterface(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new HasNotGTFieldsImplementsInterface(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(obj).IsNotEqualTo(_obj);
     }
     [Test]
     public async ValueTask TestDerivedImplementsInterface()
     {
       var obj = new DerivesHasNotGTFieldsImplementsInterface();
-      var s11n = obj.S11nParse();
-      var _obj = new DerivesHasNotGTFieldsImplementsInterface(new DictionaryConfig(s11n).ForInit());
+      var s11n = obj.S11nParse(new CurrLoadedAssemblies());
+      var _obj = new DerivesHasNotGTFieldsImplementsInterface(new DictionaryConfig(s11n).ForInit(new CurrLoadedAssemblies()));
       await Assert.That(obj).IsNotEqualTo(_obj);
       await ValueTask.CompletedTask;
     }

@@ -416,11 +416,11 @@ namespace GTMH.S11n
     private static void WriteS11n(S11nClassDefn a_Defn, Code code)
     {
       var modifier = a_Defn.HasGTParent ? "override" : "virtual";
-      code.WriteLine($"public {modifier} Dictionary<string,string> S11nParse()");
+      code.WriteLine($"public {modifier} Dictionary<string,string> S11nParse(ITypeResolver a_TypeResolver)");
       code.WriteLine("{");
       using(code.Indent())
       {
-        code.WriteLine("return S11nGather(new GTParseArgs()).Value;");
+        code.WriteLine("return S11nGather(new GTParseArgs(a_TypeResolver)).Value;");
       }
       code.WriteLine("}");
       code.WriteLine($"public {modifier} IGTParseArgs S11nGather(IGTParseArgs a_Args)");
