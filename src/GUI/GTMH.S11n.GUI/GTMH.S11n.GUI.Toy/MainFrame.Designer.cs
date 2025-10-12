@@ -32,7 +32,7 @@ partial class MainFrame
     fileToolStripMenuItem = new ToolStripMenuItem();
     setObjectTypeToolStripMenuItem = new ToolStripMenuItem();
     m_StatusStrip = new StatusStrip();
-    m_View = new GenericS11nControl();
+    m_View = new Widget();
     menuStrip1.SuspendLayout();
     SuspendLayout();
     // 
@@ -98,6 +98,6 @@ partial class MainFrame
   private MenuStrip menuStrip1;
   private ToolStripMenuItem fileToolStripMenuItem;
   private StatusStrip m_StatusStrip;
-  private GenericS11nControl m_View;
+  private Widget m_View;
   private ToolStripMenuItem setObjectTypeToolStripMenuItem;
 }

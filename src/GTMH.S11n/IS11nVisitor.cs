@@ -8,7 +8,7 @@ namespace GTMH.S11n
   {
     void VisitPOD(string a_Name);
     void VisitPOD(string a_Name, string a_DefaultValue);
-    void VisitInstance(string a_Name, string a_Type, bool a_Required);
-    void VisitInstanceList(string a_Name, string a_Type, bool a_Required);
+    void Visit(string a_Name, string a_Type, bool a_Required);
+    void VisitList(string a_Name, string a_Type, bool a_Required);
   }
 }

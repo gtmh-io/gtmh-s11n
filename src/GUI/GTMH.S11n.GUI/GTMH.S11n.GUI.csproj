@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\GTMH.S11n.Reflection\GTMH.S11n.Reflection.csproj" />
     <ProjectReference Include="..\..\GTMH.S11n\GTMH.S11n.csproj" />
   </ItemGroup>
 

@@ -4,7 +4,13 @@
     <Compile Update="ArgsGridView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="GenericS11nControl.cs">
+    <Compile Update="View\InstanceView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="View\ListView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Widget.cs">
       <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
