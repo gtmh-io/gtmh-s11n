@@ -31,6 +31,8 @@
       m_ListView = new DataGridView();
       m_AddButton = new Button();
       m_RemButton = new Button();
+      m_UpButton = new Button();
+      m_DownButton = new Button();
       ((System.ComponentModel.ISupportInitialize)m_ListView).BeginInit();
       SuspendLayout();
       // 
@@ -38,6 +40,7 @@
       // 
       m_ListView.AllowUserToAddRows = false;
       m_ListView.AllowUserToDeleteRows = false;
+      m_ListView.AllowUserToResizeRows = false;
       m_ListView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
       m_ListView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
       m_ListView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -72,11 +75,37 @@
       m_RemButton.UseVisualStyleBackColor = true;
       m_RemButton.Click += m_RemButton_Click;
       // 
+      // m_UpButton
+      // 
+      m_UpButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+      m_UpButton.Enabled = false;
+      m_UpButton.Location = new Point(3, 424);
+      m_UpButton.Name = "m_UpButton";
+      m_UpButton.Size = new Size(63, 21);
+      m_UpButton.TabIndex = 1;
+      m_UpButton.Text = "Up";
+      m_UpButton.UseVisualStyleBackColor = true;
+      m_UpButton.Click += m_UpButton_Click;
+      // 
+      // m_DownButton
+      // 
+      m_DownButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+      m_DownButton.Enabled = false;
+      m_DownButton.Location = new Point(67, 424);
+      m_DownButton.Name = "m_DownButton";
+      m_DownButton.Size = new Size(63, 21);
+      m_DownButton.TabIndex = 1;
+      m_DownButton.Text = "Down";
+      m_DownButton.UseVisualStyleBackColor = true;
+      m_DownButton.Click += m_DownButton_Click;
+      // 
       // ListView
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
+      Controls.Add(m_DownButton);
       Controls.Add(m_RemButton);
+      Controls.Add(m_UpButton);
       Controls.Add(m_AddButton);
       Controls.Add(m_ListView);
       Name = "ListView";
@@ -90,5 +119,7 @@
     private DataGridView m_ListView;
     private Button m_AddButton;
     private Button m_RemButton;
+    private Button m_UpButton;
+    private Button m_DownButton;
   }
 }
