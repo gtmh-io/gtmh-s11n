@@ -144,7 +144,7 @@ public partial class MainFrame : Form
       var ty = ass.GetTypes().Where(_=>_.FullName==m_View.ClassName).Single();
       var c = ty.GetConstructors(System.Reflection.BindingFlags.Public|System.Reflection.BindingFlags.Instance).Where(_=>Instantiable.IsConstructible(_)).Single();
 
-      var args = new DictionaryConfig(s11n).ForInit(new TypeResolution.CurrLoadedAssemblies()); 
+      var args = new DictionaryConfig(s11n).ForInit(m_View.LoadContext); 
       c.Invoke(new[] { args } );
 
       this.ShowInfoDialog($"Instantiated {m_View.ClassName} from assembly {m_View.Assembly}");

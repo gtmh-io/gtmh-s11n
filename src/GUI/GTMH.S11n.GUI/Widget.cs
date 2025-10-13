@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 using GTMH.S11n.GUI.Node;
 using GTMH.S11n.Reflection;
+using GTMH.S11n.TypeResolution;
 
 namespace GTMH.S11n.GUI
 {
@@ -18,7 +19,7 @@ namespace GTMH.S11n.GUI
     public string? Assembly { get; private set; } = null;
     public string ? ClassName { get; private set; } = null;
 
-    public LoadContext LoadContext { get; private set;} = new LoadContext();
+    public ITypeResolver LoadContext { get; private set;} = new CurrLoadedAssemblies();
 
     Font m_FontUnconfigured;
     Font m_FontConfigured;
@@ -181,7 +182,7 @@ namespace GTMH.S11n.GUI
         m_TreeView.SelectedNode = RootNode;
         this.Assembly = a_Assembly;
         this.ClassName = a_Class;
-        LoadContext = new LoadContext( a_Assembly);
+        LoadContext = new BasisAssembly( a_Assembly);
       }
       catch(Exception e)
       {
@@ -241,6 +242,13 @@ namespace GTMH.S11n.GUI
         this.Clear();
         return;
       }
+    }
+
+    internal string GetBasisDirectory()
+    {
+      if ( Assembly == null ) return "";
+      var rval = System.IO.Path.GetDirectoryName(Assembly);
+      return rval??"";
     }
 
     class ContentPopulator(Widget a_Control, InstanceNode a_Parent, Dictionary<string, string> a_Content) : StructurePopulator(a_Control, a_Parent)

@@ -77,7 +77,7 @@ public partial class InstanceView : UserControl
   {
     var dlg = new OpenFileDialog();
     dlg.Filter = ".Net Assembly|*.dll";
-    using(var ll = dlg.LastLocation(m_Node.InterfaceType==null?$"InstanceView.{m_Node.Context}.Browse":$"InstanceView.{m_Node.Context}.{m_Node.InterfaceType.FullName}.Browse", m_Widget.LoadContext.Directory))
+    using(var ll = dlg.LastLocation(m_Node.InterfaceType==null?$"InstanceView.{m_Node.Context}.Browse":$"InstanceView.{m_Node.Context}.{m_Node.InterfaceType.FullName}.Browse", m_Widget.GetBasisDirectory()))
     {
       if ( dlg.ShowDialog(this) != DialogResult.OK )  return;
       ll.Commit();

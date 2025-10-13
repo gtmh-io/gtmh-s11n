@@ -13,7 +13,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="vsbin\**" />
+    <EmbeddedResource Remove="vsbin\**" />
+    <None Remove="vsbin\**" />
+    <Compile Remove=".*" />
+    <EmbeddedResource Remove=".*" />
+    <None Remove=".*" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GTMH.S11n\GTMH.S11n.csproj" />
   </ItemGroup>
 
 </Project>
