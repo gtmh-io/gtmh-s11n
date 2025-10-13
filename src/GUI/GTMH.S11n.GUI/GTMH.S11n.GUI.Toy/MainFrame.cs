@@ -30,14 +30,15 @@ public partial class MainFrame : Form
     dlg.Filter = ".Net Assembly|*.dll";
     using(var ll = dlg.LastLocation("setObjectType"))
     {
-      if ( dlg.ShowDialog(this) != DialogResult.OK )  return;
+      if(dlg.ShowDialog(this) != DialogResult.OK)
+        return;
       ll.Commit();
     }
 
-    string [] ible;
+    string[] ible;
     try
     {
-      ible = Instantiable.Find(dlg.FileName, null ).ToArray();
+      ible = Instantiable.Find(dlg.FileName, null).ToArray();
     }
     catch(Exception e)
     {
@@ -50,9 +51,16 @@ public partial class MainFrame : Form
       return;
     }
 
-    var clsDlg  = new ClassDialog(ible);
-    if ( clsDlg.ShowDialog(this) != DialogResult.OK) return;
+    var clsDlg = new ClassDialog(ible);
+    if(clsDlg.ShowDialog(this) != DialogResult.OK)
+      return;
 
     m_View.SetObject(dlg.FileName, clsDlg.SelectedItem);
+  }
+
+  private void printConfigToolStripMenuItem_Click(object sender, EventArgs e)
+  {
+    var dlg = new PrintConfigDialog(m_View.GetDictionaryConfig());
+    dlg.ShowDialog(this);
   }
 }

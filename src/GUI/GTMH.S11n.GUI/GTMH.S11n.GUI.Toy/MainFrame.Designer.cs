@@ -33,6 +33,7 @@ partial class MainFrame
     setObjectTypeToolStripMenuItem = new ToolStripMenuItem();
     m_StatusStrip = new StatusStrip();
     m_View = new Widget();
+    printConfigToolStripMenuItem = new ToolStripMenuItem();
     menuStrip1.SuspendLayout();
     SuspendLayout();
     // 
@@ -47,7 +48,7 @@ partial class MainFrame
     // 
     // fileToolStripMenuItem
     // 
-    fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { setObjectTypeToolStripMenuItem });
+    fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { setObjectTypeToolStripMenuItem, printConfigToolStripMenuItem });
     fileToolStripMenuItem.Name = "fileToolStripMenuItem";
     fileToolStripMenuItem.Size = new Size(37, 20);
     fileToolStripMenuItem.Text = "&File";
@@ -76,6 +77,14 @@ partial class MainFrame
     m_View.Size = new Size(800, 404);
     m_View.TabIndex = 2;
     // 
+    // printConfigToolStripMenuItem
+    // 
+    printConfigToolStripMenuItem.Name = "printConfigToolStripMenuItem";
+    printConfigToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.P;
+    printConfigToolStripMenuItem.Size = new Size(199, 22);
+    printConfigToolStripMenuItem.Text = "&Print Config";
+    printConfigToolStripMenuItem.Click += printConfigToolStripMenuItem_Click;
+    // 
     // MainFrame
     // 
     AutoScaleDimensions = new SizeF(7F, 15F);
@@ -100,4 +109,5 @@ partial class MainFrame
   private StatusStrip m_StatusStrip;
   private Widget m_View;
   private ToolStripMenuItem setObjectTypeToolStripMenuItem;
+  private ToolStripMenuItem printConfigToolStripMenuItem;
 }

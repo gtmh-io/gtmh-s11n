@@ -75,5 +75,20 @@ namespace GTMH.S11n.GUI.Node
     {
       m_Arguments.Add(a_Name, new ArgData() { DefaultValue = a_DefaultValue, Value = null });
     }
+
+    internal void AppendNodeConfig(Dictionary<string, string> rval)
+    {
+      if ( Assembly != "" && ClassName != "" )
+      {
+        rval.Add($"{Context}", ClassName);
+      }
+      foreach(var arg in m_Arguments)
+      {
+        if(arg.Value.Value != null)
+        {
+          rval.Add($"{Context}.{arg.Key}", arg.Value.Value);
+        }
+      }
+    }
   }
 }

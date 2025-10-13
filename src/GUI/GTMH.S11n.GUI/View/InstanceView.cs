@@ -31,6 +31,7 @@ public partial class InstanceView : UserControl
     PopulateArgs();
     if(m_Node.Assembly != "")
     {
+      m_AssemblyTB.Text = m_Node.Assembly;
       foreach(var ty in Instantiable.Find(m_Node.Assembly, m_Node.InterfaceType).OrderBy(_=>_))
       {
         m_TypeSelector.Items.Add(ty);

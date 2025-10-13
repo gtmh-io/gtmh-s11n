@@ -112,6 +112,30 @@ namespace GTMH.S11n.GUI
       m_TreeView.SelectedNode = node;
     }
 
+    public Dictionary<string,string> GetDictionaryConfig()
+    {
+      Dictionary<string,string> rval = new();
+      Action<TreeNode> appendConfig = n=> { };
+      appendConfig = n=>
+      {
+        if ( n is InstanceNode @in )
+        {
+          @in.AppendNodeConfig(rval);
+        }
+        else if ( n is ListNode ln )
+        {
+          ln.AppendNodeConfig(rval);
+        }
+        foreach(TreeNode ch in n.Nodes)
+        {
+          appendConfig(ch);
+        }
+      };
+      appendConfig(RootNode);
+
+      return rval;
+    }
+
     public class Populator (Widget a_Control, InstanceNode a_Parent) : GTMH.S11n.IS11nVisitor
     {
       public Widget Control { get; } = a_Control;
