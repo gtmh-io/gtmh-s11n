@@ -28,7 +28,7 @@ public partial class InstanceView : UserControl
     InitializeComponent();
     m_Node = @in;
     m_Widget = widget;
-    PopulateArgs();
+    m_Args.SetViewData(@in);
     if(m_Node.Assembly != "")
     {
       m_AssemblyTB.Text = m_Node.Assembly;
@@ -41,20 +41,6 @@ public partial class InstanceView : UserControl
     m_Suppress = false;
   }
 
-  private void PopulateArgs()
-  {
-    foreach(var arg in m_Node.POD)
-    {
-      if(arg.Value.DefaultValue != null)
-      {
-        this.m_Args.Add(arg.Key, arg.Value.Value, arg.Value.DefaultValue);
-      }
-      else
-      {
-        this.m_Args.Add(arg.Key, arg.Value.Value);
-      }
-    }
-  }
 
   private void m_ClearButton_Click(object sender, EventArgs e)
   {
