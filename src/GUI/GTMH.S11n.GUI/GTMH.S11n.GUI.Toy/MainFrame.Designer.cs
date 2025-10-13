@@ -36,6 +36,7 @@ partial class MainFrame
     loadToolStripMenuItem = new ToolStripMenuItem();
     m_StatusStrip = new StatusStrip();
     m_View = new Widget();
+    instantiateToolStripMenuItem = new ToolStripMenuItem();
     menuStrip1.SuspendLayout();
     SuspendLayout();
     // 
@@ -50,7 +51,7 @@ partial class MainFrame
     // 
     // fileToolStripMenuItem
     // 
-    fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { setObjectTypeToolStripMenuItem, printConfigToolStripMenuItem, saveToolStripMenuItem, loadToolStripMenuItem });
+    fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { setObjectTypeToolStripMenuItem, printConfigToolStripMenuItem, saveToolStripMenuItem, loadToolStripMenuItem, instantiateToolStripMenuItem });
     fileToolStripMenuItem.Name = "fileToolStripMenuItem";
     fileToolStripMenuItem.Size = new Size(37, 20);
     fileToolStripMenuItem.Text = "&File";
@@ -103,6 +104,14 @@ partial class MainFrame
     m_View.Size = new Size(800, 404);
     m_View.TabIndex = 2;
     // 
+    // instantiateToolStripMenuItem
+    // 
+    instantiateToolStripMenuItem.Name = "instantiateToolStripMenuItem";
+    instantiateToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.I;
+    instantiateToolStripMenuItem.Size = new Size(199, 22);
+    instantiateToolStripMenuItem.Text = "&Instantiate";
+    instantiateToolStripMenuItem.Click += instantiateToolStripMenuItem_Click;
+    // 
     // MainFrame
     // 
     AutoScaleDimensions = new SizeF(7F, 15F);
@@ -130,4 +139,5 @@ partial class MainFrame
   private ToolStripMenuItem printConfigToolStripMenuItem;
   private ToolStripMenuItem saveToolStripMenuItem;
   private ToolStripMenuItem loadToolStripMenuItem;
+  private ToolStripMenuItem instantiateToolStripMenuItem;
 }

@@ -16,7 +16,7 @@ namespace GTMH.S11n.GUI
     private InstanceNode RootNode { get; set; }
 
     public string? Assembly { get; private set; } = null;
-    private string ? m_Class;
+    public string ? ClassName { get; private set; } = null;
 
     public LoadContext LoadContext { get; private set;} = new LoadContext();
 
@@ -180,7 +180,7 @@ namespace GTMH.S11n.GUI
         Instantiable.Visit(a_Assembly, a_Class, pop);
         m_TreeView.SelectedNode = RootNode;
         this.Assembly = a_Assembly;
-        this.m_Class = a_Class;
+        this.ClassName = a_Class;
         LoadContext = new LoadContext( a_Assembly);
       }
       catch(Exception e)
@@ -222,7 +222,7 @@ namespace GTMH.S11n.GUI
 
     public void SetDictionaryConfig(Dictionary<string, string> a_Config)
     {
-      if ( Assembly == null || m_Class == null )
+      if ( Assembly == null || ClassName == null )
       {
         throw new InvalidOperationException("Widget not configured with an object");
       }
@@ -231,7 +231,7 @@ namespace GTMH.S11n.GUI
       var pop = new ContentPopulator(this, RootNode, a_Config);
       try
       {
-        Instantiable.Visit(Assembly, m_Class, pop);
+        Instantiable.Visit(Assembly, ClassName, pop);
         m_TreeView.SelectedNode = RootNode;
         this.UpdateVisualCues();
       }
@@ -245,7 +245,7 @@ namespace GTMH.S11n.GUI
 
     class ContentPopulator(Widget a_Control, InstanceNode a_Parent, Dictionary<string, string> a_Content) : StructurePopulator(a_Control, a_Parent)
     {
-       (string, string) parseAssembly(string value)
+      (string, string) parseAssembly(string value)
       {
         var idx = value.IndexOf(',');
         if ( base.Control.Assembly==null) throw new InvalidOperationException("Widget not configured with an assembly");

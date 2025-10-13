@@ -105,17 +105,17 @@ public partial class MainFrame : Form
     }
     try
     {
-      using ( var stream = new StreamReader(new FileStream(dlg.FileName, FileMode.Open, FileAccess.Read, FileShare.Read)) )
+      using(var stream = new StreamReader(new FileStream(dlg.FileName, FileMode.Open, FileAccess.Read, FileShare.Read)))
       {
         var dict = new Dictionary<string, string>();
         string? line;
-        while( (line = stream.ReadLine()) != null )
+        while((line = stream.ReadLine()) != null)
         {
           var eq = line.IndexOf('=');
           if(eq < 0)
             continue;
           var key = line.Substring(0, eq).Trim();
-          var val = line.Substring(eq+1).Trim();
+          var val = line.Substring(eq + 1).Trim();
           dict[key] = val;
         }
         m_View.SetDictionaryConfig(dict);
@@ -124,6 +124,34 @@ public partial class MainFrame : Form
     catch(Exception ex)
     {
       this.ShowErrorDialog($"Error: {ex.Message}");
+      return;
+    }
+  }
+
+  private void instantiateToolStripMenuItem_Click(object sender, EventArgs ea)
+  {
+    if ( m_View.ClassName == null || m_View.Assembly==null)
+    {
+      this.ShowInfoDialog("No type selected");
+      return;
+    }
+    var s11n = m_View.GetDictionaryConfig();
+    try
+    {
+      // in normal use we'd have the concrete type of the class
+      // but here we don't so look for constructor via reflection
+      var ass = Assembly.LoadFrom(m_View.Assembly);
+      var ty = ass.GetTypes().Where(_=>_.FullName==m_View.ClassName).Single();
+      var c = ty.GetConstructors(System.Reflection.BindingFlags.Public|System.Reflection.BindingFlags.Instance).Where(_=>Instantiable.IsConstructible(_)).Single();
+
+      var args = new DictionaryConfig(s11n).ForInit(new TypeResolution.CurrLoadedAssemblies()); 
+      c.Invoke(new[] { args } );
+
+      this.ShowInfoDialog($"Instantiated {m_View.ClassName} from assembly {m_View.Assembly}");
+    }
+    catch(Exception e)
+    {
+      this.ShowErrorDialog($"Error: {e.Message}");
       return;
     }
   }

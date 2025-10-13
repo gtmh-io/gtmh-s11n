@@ -17,17 +17,22 @@ public class Instantiable
       if ( type.IsInterface || type.IsAbstract ) continue;
       if ( a_WithInterface != null && !type.GetInterfaces().Contains(a_WithInterface) ) continue;
       // look for matching constructor as proxy
-      // TODO this should be more robust
-      Func<ParameterInfo[],bool> isMatchSig = parameters=>
-      {
-        if ( parameters.Length != 1 ) return false;
-        return parameters[0].ParameterType.FullName==typeof(IGTInitArgs).FullName; // can't rely on compare capital T type
-      };
-      var c = type.GetConstructors(System.Reflection.BindingFlags.Public|System.Reflection.BindingFlags.Instance).Where(_=>isMatchSig(_.GetParameters())).SingleOrDefault();
+      var c = type.GetConstructors(System.Reflection.BindingFlags.Public|System.Reflection.BindingFlags.Instance).Where(_=>IsConstructible(_)).SingleOrDefault();
       
       if ( c != null ) yield return type.FullName ?? type.Name; 
     }
   }
+
+  public static bool IsConstructible(ConstructorInfo a_Constructor)
+  {
+    Func<ParameterInfo[],bool> isMatchSig = parameters=>
+    {
+      if ( parameters.Length != 1 ) return false;
+      return parameters[0].ParameterType.FullName==typeof(IGTInitArgs).FullName; // can't rely on compare capital T type
+    };
+    return isMatchSig(a_Constructor.GetParameters());
+  }
+
   public static void Visit(string a_AssemblyFile, string a_ClassName, IS11nVisitor a_Visitor)
   {
     var ass = Assembly.LoadFrom(a_AssemblyFile);
