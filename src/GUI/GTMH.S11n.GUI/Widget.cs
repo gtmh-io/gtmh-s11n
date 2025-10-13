@@ -19,7 +19,7 @@ namespace GTMH.S11n.GUI
     public string? Assembly { get; private set; } = null;
     public string ? ClassName { get; private set; } = null;
 
-    public ITypeResolver LoadContext { get; private set;} = new CurrLoadedAssemblies();
+    public BasisAssembly ? LoadContext { get; private set;}
 
     Font m_FontUnconfigured;
     Font m_FontConfigured;
@@ -256,14 +256,14 @@ namespace GTMH.S11n.GUI
       (string, string) parseAssembly(string value)
       {
         var idx = value.IndexOf(',');
-        if ( base.Control.Assembly==null) throw new InvalidOperationException("Widget not configured with an assembly");
-        if ( idx < 0 ) return (value, base.Control.Assembly);
+        if ( idx < 0 ) return (value, "");
         else return (value.Substring(0, idx).Trim(), value.Substring(idx+1).Trim());
       }
       private readonly Dictionary<string, string> Config = a_Content;
       string KeyFor(string a_Name) => Parent.Context == "" ? a_Name : $"{Parent.Context}.{a_Name}";
       public override void Visit(string a_Name, Type a_Type, bool a_Required)
       {
+        if (Control.LoadContext ==null ) throw new ArgumentNullException("Expect a load context");
         base.Visit(a_Name, a_Type, a_Required);
         if ( Config.TryGetValue( KeyFor(a_Name), out var instanceConfig ) )
         {
@@ -273,11 +273,12 @@ namespace GTMH.S11n.GUI
           var node = originalNode.Copy(assembly, cls);
           Control.UpdateNodeImpl(originalNode, node, false);
           var pop = new ContentPopulator(Control, node, Config);
-          Instantiable.Visit(assembly, cls, pop);
+          Instantiable.Visit(Control.LoadContext.GetAbsolutePath(assembly), cls, pop);
         }
       }
       public override void VisitList(string a_Name, Type a_Type, bool a_Required)
       {
+        if (Control.LoadContext ==null ) throw new ArgumentNullException("Expect a load context");
         base.VisitList(a_Name, a_Type, a_Required);
         var arrayLenKey = $"{KeyFor(a_Name)}.Array-Length";
         if(Config.TryGetValue(arrayLenKey, out var strVar)&&int.TryParse(strVar, out var arrayLen)&&arrayLen>0)
@@ -295,7 +296,7 @@ namespace GTMH.S11n.GUI
               var node = originalNode.Copy(assembly, cls);
               Control.UpdateNodeImpl(originalNode, node, false);
               var pop = new ContentPopulator(Control, node, Config);
-              Instantiable.Visit(assembly, cls, pop);
+              Instantiable.Visit(Control.LoadContext.GetAbsolutePath(assembly), cls, pop);
             }
           }
         }

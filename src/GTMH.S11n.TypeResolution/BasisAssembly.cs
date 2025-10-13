@@ -22,15 +22,16 @@ namespace GTMH.S11n.TypeResolution
       if ( a_Value == null ) return "";
       var ty = a_Value.GetType();
       if ( ty.Assembly == m_Basis) return ty.FullName??ty.Name;
-      return $"{ty.FullName??ty.Name},{GetRelative(ty.Assembly.Location)}";
+      return $"{ty.FullName??ty.Name},{GetRelativePath(ty.Assembly.Location)}";
     }
 
-    private string GetRelative(string a_FileName)
+    public string GetRelativePath(string a_FileName)
     {
+      if ( m_Basis.Location == a_FileName ) return "";
       return a_FileName;
     }
 
-    private string GetAbsolute(string a_Path)
+    public string GetAbsolutePath(string a_Path)
     {
       if ( a_Path == "" ) return m_Basis.Location;
       return a_Path;
@@ -43,9 +44,9 @@ namespace GTMH.S11n.TypeResolution
       var assembly = a_StringValue.Substring(idx+1).Trim();
       var cls = a_StringValue.Substring(0, idx);
       var rval = m_Default.ResolveType(cls);
-      //if ( rval != null ) return rval;
+      if ( rval != null ) return rval;
       var loader= new Loader();
-      var ass = loader.Load(GetAbsolute(assembly));
+      var ass = loader.Load(GetAbsolutePath(assembly));
       rval = ass.GetTypes().Where(_=>_.FullName==cls).SingleOrDefault();
       if ( rval == null ) throw new S11nException($"Failed load '{cls}' from '{assembly}'");
       return rval;
@@ -63,17 +64,13 @@ namespace GTMH.S11n.TypeResolution
 
       public Assembly Load(string assemblyPath)
       {
-        // Subscribe to resolve event
         AppDomain.CurrentDomain.AssemblyResolve += ResolveFromCurrentContext;
-
         try
         {
-          // Load the assembly
           return Assembly.LoadFrom(assemblyPath);
         }
         finally
         {
-          // Unsubscribe to prevent memory leaks
           AppDomain.CurrentDomain.AssemblyResolve -= ResolveFromCurrentContext;
         }
       }
