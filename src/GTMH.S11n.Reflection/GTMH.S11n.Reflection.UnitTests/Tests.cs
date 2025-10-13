@@ -19,7 +19,7 @@ public class Tests
   [Test]
   public async ValueTask FindInstantiableLibB()
   {
-    var path = "packaged\\GTMH.S11n.Reflection.UnitTests.LibB.dll";
+    var path = "packaged/GTMH.S11n.Reflection.UnitTests.LibB.dll";
     var ible = Instantiable.Find(path, null).ToArray();
     await Assert.That(ible.OrderBy(_=>_)).IsEquivalentTo( new[] { "GTMH.S11n.Reflection.UnitTests.LibB.LibBInterfaceImpl" } );
   }
@@ -27,7 +27,7 @@ public class Tests
   public async ValueTask VisitPackaged()
   {
     var visitor = new Visitor();
-    Instantiable.Visit("packaged\\GTMH.S11n.Reflection.UnitTests.LibB.dll", "GTMH.S11n.Reflection.UnitTests.LibB.LibBInterfaceImpl", visitor);
+    Instantiable.Visit("packaged/GTMH.S11n.Reflection.UnitTests.LibB.dll", "GTMH.S11n.Reflection.UnitTests.LibB.LibBInterfaceImpl", visitor);
     await Assert.That(visitor.Visited).IsEquivalentTo(new[] { ("Instance", "GTMH.S11n.Reflection.UnitTests.LibA.LibAInterfaceType", true) });
     await Assert.That(visitor.ListVisited).IsEquivalentTo(new[] { ("InstanceList", "GTMH.S11n.Reflection.UnitTests.LibA.LibAInterfaceType", true) });
     await Assert.That(visitor.PODDefaultVisited).IsEquivalentTo(new[] { ("Name", "LibBInterfaceImpl") });
