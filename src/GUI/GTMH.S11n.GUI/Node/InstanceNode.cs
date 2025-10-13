@@ -8,7 +8,7 @@ namespace GTMH.S11n.GUI.Node
 {
   public class InstanceNode : System.Windows.Forms.TreeNode
   {
-    public string Context { get; init; }
+    public string Context { get; private set; }
     public Type? InterfaceType { get; }
     public string Assembly { get; set; } = "";
     public string ClassName { get; set; } = "";
@@ -27,6 +27,7 @@ namespace GTMH.S11n.GUI.Node
     /// </summary>
     public InstanceNode(string a_Name, Widget a_Control)
     {
+      if ( string.IsNullOrEmpty(a_Name) ) throw new ArgumentException("a_Name must not be empty");
       this.Text=a_Name;
       Context = "";
       InterfaceType = null;
@@ -35,10 +36,18 @@ namespace GTMH.S11n.GUI.Node
 
     public InstanceNode(string a_Name, Type a_Type, Widget a_Control, string a_ParentContext)
     {
+      if ( string.IsNullOrEmpty(a_Name) ) throw new ArgumentException("a_Name must not be empty");
       this.Text = a_Name;
       InterfaceType = a_Type;
       Context = a_ParentContext == "" ? a_Name : $"{a_ParentContext}.{a_Name}";
       m_Control = a_Control;
+    }
+
+    public void ResetName(string a_Name)
+    {
+      var components = Context.Split('.').Reverse().Skip(1).Reverse();
+      this.Text = a_Name;
+      this.Context = string.Join('.', components.Append(a_Name));
     }
 
     private InstanceNode(string a_Name, Type? a_Type, Widget a_Control, string a_Context, string a_Assembly, string a_ClassName)
@@ -56,7 +65,6 @@ namespace GTMH.S11n.GUI.Node
       if ( InterfaceType==null ) return new InstanceNode(this.Text, m_Control) { Assembly = a_Assembly, ClassName = a_ClassName };
       else return new InstanceNode (this.Text, this.InterfaceType, m_Control, this.Context, a_Assembly, a_ClassName );
     }
-    
 
     public void Clear()
     {
