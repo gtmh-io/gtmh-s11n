@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.PerformanceData;
 using System.Text;
+using System.Web;
 
 namespace GTMH.S11n.GUI.Node
 {
   public class InstanceNode : System.Windows.Forms.TreeNode
   {
     public string Context { get; init; }
-    public string Assembly { get; }
-    public string Type { get; }
+    public Type? InterfaceType { get; }
+    public string Assembly { get; set; } = "";
+    public string ClassName { get; set; } = "";
+    Widget m_Control;
 
     public class ArgData
     {
@@ -21,32 +25,43 @@ namespace GTMH.S11n.GUI.Node
     /// <summary>
     /// Root node
     /// </summary>
-    public InstanceNode(string a_Name)
+    public InstanceNode(string a_Name, Widget a_Control)
     {
       this.Text=a_Name;
       Context = "";
-      Assembly = "";
-      Type = "";
+      InterfaceType = null;
+      m_Control = a_Control;
     }
-    public InstanceNode(string a_Name, string a_Type, Widget a_Control, string a_ParentContext)
+
+    public InstanceNode(string a_Name, Type a_Type, Widget a_Control, string a_ParentContext)
     {
       this.Text = a_Name;
-      var split = a_Type.Split(',');
-      if(split.Length > 1)
-      {
-        Assembly=split[0];
-        Type = split[1];
-      }
-      else
-      {
-        Assembly = "";
-        Type=a_Type;
-      }
+      InterfaceType = a_Type;
       Context = a_ParentContext == "" ? a_Name : $"{a_ParentContext}.{a_Name}";
+      m_Control = a_Control;
     }
+
+    private InstanceNode(string a_Name, Type? a_Type, Widget a_Control, string a_Context, string a_Assembly, string a_ClassName)
+    {
+      this.Text = a_Name;
+      InterfaceType = a_Type;
+      Context = a_Context;
+      Assembly = a_Assembly;
+      ClassName = a_ClassName;
+      m_Control = a_Control;
+    }
+
+    public InstanceNode Copy(string a_Assembly, string a_ClassName)
+    {
+      if ( InterfaceType==null ) return new InstanceNode(this.Text, m_Control) { Assembly = a_Assembly, ClassName = a_ClassName };
+      else return new InstanceNode (this.Text, this.InterfaceType, m_Control, this.Context, a_Assembly, a_ClassName );
+    }
+    
 
     public void Clear()
     {
+      this.Assembly = "";
+      this.ClassName = "";
       this.Nodes.Clear();
       m_Arguments.Clear();
     }

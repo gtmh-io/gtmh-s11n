@@ -27,7 +27,7 @@ public partial class MainFrame : Form
   private void setObjectTypeToolStripMenuItem_Click(object sender, EventArgs ea)
   {
     var dlg = new OpenFileDialog();
-    dlg.Filter = ".Net Assembly|*.exe;*.dll";
+    dlg.Filter = ".Net Assembly|*.dll";
     using(var ll = dlg.LastLocation("setObjectType"))
     {
       if ( dlg.ShowDialog(this) != DialogResult.OK )  return;

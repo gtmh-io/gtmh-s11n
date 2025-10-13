@@ -13,35 +13,58 @@ namespace GTMH.S11n.GUI
 {
   public partial class Widget : UserControl
   {
-    private readonly InstanceNode RootNode;
+    private InstanceNode RootNode { get; set; }
+
+    
+    public LoadContext LoadContext { get; private set;} = new LoadContext();
 
     public Widget()
     {
       InitializeComponent();
-      this.RootNode = new InstanceNode( "Root" );
+      this.RootNode = new InstanceNode( "Root", this );
       this.m_TreeView.Nodes.Add(this.RootNode);
       this.m_TreeView.AfterSelect += OnNodeSelect;
     }
 
-    private void OnNodeSelect(Object? sender, TreeViewEventArgs e)
+    private void OnNodeSelect(Object? sender, TreeViewEventArgs ea)
     {
       m_SplitContainer.Panel2.Controls.Clear();
-      if ( e.Node is InstanceNode @in )
+      try
       {
-        var c = new InstanceView(@in, this);
-        c.Dock = DockStyle.Fill;
-        this.m_SplitContainer.Panel2.Controls.Add(c);
-        if(@in == this.RootNode)
+        if(ea.Node is InstanceNode @in)
         {
-          c.m_AssemblyPanel.Enabled = false;
+          var c = new InstanceView(@in, this);
+          c.Dock = DockStyle.Fill;
+          this.m_SplitContainer.Panel2.Controls.Add(c);
+          if(@in == this.RootNode)
+          {
+            c.m_AssemblyPanel.Enabled = false;
+          }
+        }
+        else if(ea.Node is ListNode ln)
+        {
+          var c = new GTMH.S11n.GUI.View.ListView(ln, this);
+          c.Dock = DockStyle.Fill;
+          this.m_SplitContainer.Panel2.Controls.Add(c);
         }
       }
-      else if ( e.Node is ListNode ln )
+      catch(Exception e)
       {
-        var c = new GTMH.S11n.GUI.View.ListView(ln, this);
+        var c = new GTMH.S11n.GUI.View.ErrorView();
+        c.m_ErrorText.Text = e.ToString();
         c.Dock = DockStyle.Fill;
         this.m_SplitContainer.Panel2.Controls.Add(c);
       }
+    }
+
+    public void ShowError(Exception e)
+    {
+      this.ShowErrorDialog($"Error: {e.Message}");
+      m_SplitContainer.Panel2.Controls.Clear();
+      var c = new GTMH.S11n.GUI.View.ErrorView();
+      c.m_ErrorText.Text = e.ToString();
+      c.Dock = DockStyle.Fill;
+      this.m_SplitContainer.Panel2.Controls.Add(c);
     }
 
     public void SetObject(string a_Assembly, string a_Class)
@@ -54,6 +77,7 @@ namespace GTMH.S11n.GUI
       {
         Instantiable.Visit(a_Assembly, a_Class, pop);
         m_TreeView.SelectedNode = RootNode;
+        LoadContext =new LoadContext( a_Assembly);
       }
       catch(Exception e)
       {
@@ -69,18 +93,37 @@ namespace GTMH.S11n.GUI
       RootNode.Clear();
     }
 
-    class Populator (Widget a_Control, InstanceNode a_Parent) : GTMH.S11n.IS11nVisitor
+    internal void Update(InstanceNode m_Node, InstanceNode node)
+    {
+      var parent = m_Node.Parent;
+      if(parent == null)
+      {
+        // replacing the root node
+        m_TreeView.Nodes.Clear();
+        this.RootNode = node;
+        m_TreeView.Nodes.Add(this.RootNode);
+      }
+      else
+      {
+        var idx = parent.Nodes.IndexOf(m_Node);
+        parent.Nodes.RemoveAt(idx);
+        parent.Nodes.Insert(idx, node);
+      }
+      m_TreeView.SelectedNode = node;
+    }
+
+    public class Populator (Widget a_Control, InstanceNode a_Parent) : GTMH.S11n.IS11nVisitor
     {
       public Widget Control { get; } = a_Control;
       public InstanceNode Parent { get; } = a_Parent;
 
-      public void Visit(string a_Name, string a_Type, bool a_Required)
+      public void Visit(string a_Name, Type a_Type, bool a_Required)
       {
         var node = new InstanceNode(a_Name, a_Type, this.Control, Parent.Context);
         Parent.Nodes.Add(node);
       }
 
-      public void VisitList(string a_Name, string a_Type, bool a_Required)
+      public void VisitList(string a_Name, Type a_Type, bool a_Required)
       {
         var node = new ListNode(a_Name, a_Type, a_Required, this.Control, Parent.Context);
         Parent.Nodes.Add(node);

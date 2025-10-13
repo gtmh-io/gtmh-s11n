@@ -1,4 +1,7 @@
-﻿namespace GTMH.S11n.GUI
+﻿
+
+
+namespace GTMH.S11n.GUI
 {
   partial class InstanceView
   {
@@ -70,6 +73,7 @@
       m_TypeSelector.Name = "m_TypeSelector";
       m_TypeSelector.Size = new Size(303, 23);
       m_TypeSelector.TabIndex = 3;
+      m_TypeSelector.SelectedIndexChanged += m_TypeSelector_SelectedIndexChanged;
       // 
       // m_ClearButton
       // 
@@ -80,6 +84,7 @@
       m_ClearButton.TabIndex = 2;
       m_ClearButton.Text = "Clear";
       m_ClearButton.UseVisualStyleBackColor = true;
+      m_ClearButton.Click += this.m_ClearButton_Click;
       // 
       // m_BrowseButton
       // 
@@ -90,6 +95,7 @@
       m_BrowseButton.TabIndex = 2;
       m_BrowseButton.Text = "Browse";
       m_BrowseButton.UseVisualStyleBackColor = true;
+      m_BrowseButton.Click += m_BrowseButton_Click_1;
       // 
       // m_AssemblyTB
       // 
@@ -130,6 +136,8 @@
       m_AssemblyPanel.PerformLayout();
       ResumeLayout(false);
     }
+
+
 
     #endregion
 

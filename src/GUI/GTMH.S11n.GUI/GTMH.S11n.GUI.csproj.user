@@ -4,6 +4,9 @@
     <Compile Update="ArgsGridView.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="View\ErrorView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="View\InstanceView.cs">
       <SubType>UserControl</SubType>
     </Compile>
