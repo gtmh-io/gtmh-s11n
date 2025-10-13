@@ -59,7 +59,7 @@ public partial class InstanceView : UserControl
     }
 
     var node = m_Node.Copy(m_AssemblyTB.Text, (string)m_TypeSelector.SelectedItem);
-    var pop = new Widget.Populator(m_Widget, node);
+    var pop = new Widget.StructurePopulator(m_Widget, node);
     try
     {
       Instantiable.Visit(m_AssemblyTB.Text, (string)m_TypeSelector.SelectedItem, pop);
@@ -70,7 +70,7 @@ public partial class InstanceView : UserControl
       return;
     }
 
-    m_Widget.Update(m_Node, node);
+    m_Widget.UpdateNode(m_Node, node);
   }
 
   private void m_BrowseButton_Click_1(object sender, EventArgs ea)

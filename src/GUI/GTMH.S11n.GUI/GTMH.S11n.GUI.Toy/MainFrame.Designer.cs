@@ -31,9 +31,11 @@ partial class MainFrame
     menuStrip1 = new MenuStrip();
     fileToolStripMenuItem = new ToolStripMenuItem();
     setObjectTypeToolStripMenuItem = new ToolStripMenuItem();
+    printConfigToolStripMenuItem = new ToolStripMenuItem();
+    saveToolStripMenuItem = new ToolStripMenuItem();
+    loadToolStripMenuItem = new ToolStripMenuItem();
     m_StatusStrip = new StatusStrip();
     m_View = new Widget();
-    printConfigToolStripMenuItem = new ToolStripMenuItem();
     menuStrip1.SuspendLayout();
     SuspendLayout();
     // 
@@ -48,7 +50,7 @@ partial class MainFrame
     // 
     // fileToolStripMenuItem
     // 
-    fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { setObjectTypeToolStripMenuItem, printConfigToolStripMenuItem });
+    fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { setObjectTypeToolStripMenuItem, printConfigToolStripMenuItem, saveToolStripMenuItem, loadToolStripMenuItem });
     fileToolStripMenuItem.Name = "fileToolStripMenuItem";
     fileToolStripMenuItem.Size = new Size(37, 20);
     fileToolStripMenuItem.Text = "&File";
@@ -60,6 +62,30 @@ partial class MainFrame
     setObjectTypeToolStripMenuItem.Size = new Size(199, 22);
     setObjectTypeToolStripMenuItem.Text = "Set &Object Type";
     setObjectTypeToolStripMenuItem.Click += setObjectTypeToolStripMenuItem_Click;
+    // 
+    // printConfigToolStripMenuItem
+    // 
+    printConfigToolStripMenuItem.Name = "printConfigToolStripMenuItem";
+    printConfigToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.P;
+    printConfigToolStripMenuItem.Size = new Size(199, 22);
+    printConfigToolStripMenuItem.Text = "&Print Config";
+    printConfigToolStripMenuItem.Click += printConfigToolStripMenuItem_Click;
+    // 
+    // saveToolStripMenuItem
+    // 
+    saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+    saveToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.S;
+    saveToolStripMenuItem.Size = new Size(199, 22);
+    saveToolStripMenuItem.Text = "&Save";
+    saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
+    // 
+    // loadToolStripMenuItem
+    // 
+    loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+    loadToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.L;
+    loadToolStripMenuItem.Size = new Size(199, 22);
+    loadToolStripMenuItem.Text = "&Load";
+    loadToolStripMenuItem.Click += loadToolStripMenuItem_Click;
     // 
     // m_StatusStrip
     // 
@@ -76,14 +102,6 @@ partial class MainFrame
     m_View.Name = "m_View";
     m_View.Size = new Size(800, 404);
     m_View.TabIndex = 2;
-    // 
-    // printConfigToolStripMenuItem
-    // 
-    printConfigToolStripMenuItem.Name = "printConfigToolStripMenuItem";
-    printConfigToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.P;
-    printConfigToolStripMenuItem.Size = new Size(199, 22);
-    printConfigToolStripMenuItem.Text = "&Print Config";
-    printConfigToolStripMenuItem.Click += printConfigToolStripMenuItem_Click;
     // 
     // MainFrame
     // 
@@ -110,4 +128,6 @@ partial class MainFrame
   private Widget m_View;
   private ToolStripMenuItem setObjectTypeToolStripMenuItem;
   private ToolStripMenuItem printConfigToolStripMenuItem;
+  private ToolStripMenuItem saveToolStripMenuItem;
+  private ToolStripMenuItem loadToolStripMenuItem;
 }

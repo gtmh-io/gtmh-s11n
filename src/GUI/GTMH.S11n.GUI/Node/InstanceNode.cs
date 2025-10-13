@@ -89,6 +89,7 @@ namespace GTMH.S11n.GUI.Node
       if ( m_Arguments.TryGetValue(a_ArgName, out var arg) )
       {
         arg.Value = a_Value;
+        m_Control.SetDirty();
       }
     }
 
@@ -96,7 +97,7 @@ namespace GTMH.S11n.GUI.Node
     {
       if ( Assembly != "" && ClassName != "" )
       {
-        rval.Add($"{Context}", ClassName);
+        rval.Add($"{Context}", $"{ClassName},{Assembly}");
       }
       foreach(var arg in m_Arguments)
       {
@@ -105,6 +106,16 @@ namespace GTMH.S11n.GUI.Node
           rval.Add($"{Context}.{arg.Key}", arg.Value.Value);
         }
       }
+    }
+
+    internal bool IsConfigComplete()
+    {
+      if ( this.InterfaceType != null && this.ClassName == "" ) return false;
+      foreach(var arg in m_Arguments)
+      {
+        if ( arg.Value.Value == null && arg.Value.DefaultValue == null ) return false;
+      }
+      return true;
     }
   }
 }

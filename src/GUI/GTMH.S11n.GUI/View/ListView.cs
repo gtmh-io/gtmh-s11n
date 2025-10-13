@@ -18,9 +18,11 @@ namespace GTMH.S11n.GUI.View
     }
     BindingList<Item> m_GridData = new();
     ListNode? m_Node;
+    Widget m_Control;
     public ListView()
     {
       InitializeComponent();
+      m_Control = new Widget();
     }
 
     public ListView(ListNode ln, Widget widget)
@@ -28,6 +30,7 @@ namespace GTMH.S11n.GUI.View
       InitializeComponent();
       m_ListView.DataSource = m_GridData;
       m_Node = ln;
+      m_Control = widget;
       m_ListView.SelectionChanged += (_,__)=>OnListSelectionChanged();
       PopulateListView();
     }
@@ -69,6 +72,7 @@ namespace GTMH.S11n.GUI.View
       var @in = new InstanceNode(name, m_Node.InterfaceType, m_Node.Control, m_Node.Context);
       m_Node.Nodes.Add(@in);
       m_GridData.Add(new Item());
+      m_Control.SetDirty();
     }
 
     private void m_RemButton_Click(object sender, EventArgs e)
@@ -84,6 +88,7 @@ namespace GTMH.S11n.GUI.View
         ++currIdx;
       }
       m_GridData.Clear();
+      m_Control.SetDirty();
       PopulateListView();
     }
 
@@ -106,6 +111,7 @@ namespace GTMH.S11n.GUI.View
       m_ListView.ClearSelection();
       m_ListView.Rows[idx-1].Selected=true;
       this.OnListSelectionChanged();
+      m_Control.SetDirty();
     }
 
     private void m_DownButton_Click(object sender, EventArgs e)
@@ -127,6 +133,7 @@ namespace GTMH.S11n.GUI.View
       m_ListView.ClearSelection();
       m_ListView.Rows[idx+1].Selected=true;
       this.OnListSelectionChanged();
+      m_Control.SetDirty();
     }
   }
 }

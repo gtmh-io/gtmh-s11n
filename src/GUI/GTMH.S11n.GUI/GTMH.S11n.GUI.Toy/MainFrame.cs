@@ -63,4 +63,68 @@ public partial class MainFrame : Form
     var dlg = new PrintConfigDialog(m_View.GetDictionaryConfig());
     dlg.ShowDialog(this);
   }
+
+  private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+  {
+    var dlg = new SaveFileDialog();
+    dlg.Filter = "Text File|*.txt|All Files|*.*";
+    using(var ll = dlg.LastLocation("saveLoadLoc"))
+    {
+      if(dlg.ShowDialog(this) != DialogResult.OK)
+        return;
+      ll.Commit();
+    }
+    try
+    {
+      using(var stream = new StreamWriter(new FileStream(dlg.FileName, FileMode.Create, FileAccess.Write, FileShare.None)))
+      {
+        foreach(var kvp in m_View.GetDictionaryConfig())
+        {
+          stream.WriteLine($"{kvp.Key}={kvp.Value}");
+        }
+      }
+
+    }
+    catch(Exception ex)
+    {
+      this.ShowErrorDialog($"Error: {ex.Message}");
+      return;
+    }
+
+  }
+
+  private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+  {
+    var dlg = new OpenFileDialog();
+    dlg.Filter = "Text File|*.txt|All Files|*.*";
+    using(var ll = dlg.LastLocation("saveLoadLoc"))
+    {
+      if(dlg.ShowDialog(this) != DialogResult.OK)
+        return;
+      ll.Commit();
+    }
+    try
+    {
+      using ( var stream = new StreamReader(new FileStream(dlg.FileName, FileMode.Open, FileAccess.Read, FileShare.Read)) )
+      {
+        var dict = new Dictionary<string, string>();
+        string? line;
+        while( (line = stream.ReadLine()) != null )
+        {
+          var eq = line.IndexOf('=');
+          if(eq < 0)
+            continue;
+          var key = line.Substring(0, eq).Trim();
+          var val = line.Substring(eq+1).Trim();
+          dict[key] = val;
+        }
+        m_View.SetDictionaryConfig(dict);
+      }
+    }
+    catch(Exception ex)
+    {
+      this.ShowErrorDialog($"Error: {ex.Message}");
+      return;
+    }
+  }
 }
