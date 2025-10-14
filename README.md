@@ -122,7 +122,7 @@ Body.Array-Length - Specifies array size
 There's a GUI control and a toy editor included in the repo.
 
 Most applications of the control would have a known type as the top level element. In the Toy the top level element can be chosen and instantiated via reflection.
-![Choice of object type](doc/img/gui_class_chooser.jpg)
+![Choice of object type](doc/img/gui_class_chooser.png)
 In this case an algorithm from the HelloWorldStateful project is configured with a head
 ![Header element of algo](doc/img/gui_head.jpg)
 a variable length body
