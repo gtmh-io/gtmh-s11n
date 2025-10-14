@@ -175,7 +175,14 @@ namespace GTMH.S11n.GUI
       return rval;
     }
 
-    public void SetObject(string a_Assembly, string a_Class)
+    public void SetType(Type a_Type)
+    {
+      if ( a_Type.Assembly.Location == null ) throw new ArgumentException("Can't work with type that's not persisted to disk");
+      else if ( a_Type.FullName == null ) throw new ArgumentException("Can't work with type with no name");
+      this.SetType(a_Type.Assembly.Location, a_Type.FullName);
+    }
+
+    public void SetType(string a_Assembly, string a_Class)
     {
       this.Clear();
       RootNode.Text=a_Class.Split('.').Last();

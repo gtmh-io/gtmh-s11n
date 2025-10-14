@@ -55,7 +55,7 @@ public partial class MainFrame : Form
     if(clsDlg.ShowDialog(this) != DialogResult.OK)
       return;
 
-    m_View.SetObject(dlg.FileName, clsDlg.SelectedItem);
+    m_View.SetType(dlg.FileName, clsDlg.SelectedItem);
   }
 
   private void printConfigToolStripMenuItem_Click(object sender, EventArgs e)
