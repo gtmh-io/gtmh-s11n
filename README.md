@@ -118,6 +118,12 @@ Head.Value - Sets the Value property on the Head object
 Body.0 - First element in the Body array
 Body.Array-Length - Specifies array size
 
+## GUI Editor
+![Header element of algo](doc/img/gui_head.jpg)
+![Variable length algo body](doc/img/gui_body.jpg)
+![Config of body element](doc/img/gui_body_item.jpg)
+![Tail of algo](doc/img/gui_tail.jpg)
+
 ## Source Generator Powered
 The partial keyword enables compile-time code generation for efficient serialization without reflection overhead.
 
