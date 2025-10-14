@@ -13,8 +13,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="GTMH.S11n.TypeResolution.UnitTests\**" />
     <Compile Remove="vsbin\**" />
+    <EmbeddedResource Remove="GTMH.S11n.TypeResolution.UnitTests\**" />
     <EmbeddedResource Remove="vsbin\**" />
+    <None Remove="GTMH.S11n.TypeResolution.UnitTests\**" />
     <None Remove="vsbin\**" />
     <Compile Remove=".*" />
     <EmbeddedResource Remove=".*" />

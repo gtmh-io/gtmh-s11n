@@ -15,6 +15,7 @@ namespace GTMH.S11n.TypeResolution
       if ( a_Assembly==null ) throw new ArgumentNullException(nameof(a_Assembly));
       var loader= new Loader();
       m_Basis = loader.Load(a_Assembly);
+      if ( m_Basis.Location == null ) throw new ArgumentException($"Assembly '{a_Assembly}' has no location"); // dunno how this could happen
     }
 
     public string DisolveType(object a_Value)
@@ -25,16 +26,71 @@ namespace GTMH.S11n.TypeResolution
       return $"{ty.FullName??ty.Name},{GetRelativePath(ty.Assembly.Location)}";
     }
 
-    public string GetRelativePath(string a_FileName)
+    public static string GetRelativePath(string a_BasisFile, string a_FileName)
     {
-      if ( m_Basis.Location == a_FileName ) return "";
-      return a_FileName;
+      a_BasisFile = a_BasisFile.Replace("\\", "/");
+      a_FileName = a_FileName.Replace("\\", "/");
+      if ( a_BasisFile == a_FileName ) return "";
+      var basisToks = a_BasisFile.Split('/');
+      var fileToks = a_FileName.Split('/');
+
+      var idxTok =0;
+      var maxTok = Math.Min(basisToks.Length, fileToks.Length)-1; 
+      for( ; idxTok<maxTok; ++idxTok )
+      {
+        if ( basisToks[idxTok] != fileToks[idxTok] ) break;
+      }
+
+      if(idxTok == basisToks.Length - 1)
+      {
+        // file is rooted under basis tok directory
+        return string.Join("/", fileToks.Skip(idxTok));
+      }
+      else if(idxTok == 0)
+      {
+        // no common root
+        return a_FileName;
+      }
+      else
+      {
+        return string.Join("/", Enumerable.Repeat("..", basisToks.Length-idxTok-1).Concat(fileToks.Skip(idxTok)));
+      }
     }
 
-    public string GetAbsolutePath(string a_Path)
+    public string GetRelativePath(string a_FileName)
     {
-      if ( a_Path == "" ) return m_Basis.Location;
-      return a_Path;
+      return GetRelativePath(m_Basis.Location, a_FileName);
+    }
+
+    public static string GetAbsolutePath(string a_BasisFile, string a_RelPathFile)
+    {
+      Func<string,string> mkAbsolute = path=>
+      {
+        if ( path.Length>1 && path[1]==':') return path;
+        else return $"/{path}";
+      };
+      if ( a_RelPathFile == "" ) return a_BasisFile;
+      a_BasisFile = a_BasisFile.Replace("\\", "/");
+      a_RelPathFile = a_RelPathFile.Replace("\\", "/");
+      // is non-relative path?
+      if ( a_RelPathFile.First() == '/' || (a_RelPathFile.Length>1 && a_RelPathFile[1]==':') ) return a_RelPathFile;
+
+      var basisToks = a_BasisFile.Split('/');
+      var fileToks = a_RelPathFile.Split('/');
+      if(fileToks.Length == 1)
+      {
+        return mkAbsolute(string.Join("/", basisToks.Reverse().Skip(1).Reverse().Concat(fileToks)));
+      }
+      var backDirs = fileToks.Count(_=>_=="..");
+      return mkAbsolute(string.Join("/", basisToks.Reverse().Skip(1+backDirs).Reverse().Concat(fileToks.Skip(backDirs))));
+    }
+
+    public string GetAbsolutePath(string a_FileName)
+    {
+      if ( a_FileName == "" ) return m_Basis.Location;
+      var basisDir = System.IO.Path.GetDirectoryName(m_Basis.Location);
+      if ( basisDir==null ) return a_FileName;
+      return System.IO.Path.Combine(basisDir, a_FileName).Replace("\\", "/");
     }
 
     public Type ResolveType(string a_StringValue)
