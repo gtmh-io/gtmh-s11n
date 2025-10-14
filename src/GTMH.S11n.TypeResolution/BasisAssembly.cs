@@ -17,6 +17,12 @@ namespace GTMH.S11n.TypeResolution
       m_Basis = loader.Load(a_Assembly);
       if ( m_Basis.Location == null ) throw new ArgumentException($"Assembly '{a_Assembly}' has no location"); // dunno how this could happen
     }
+    public BasisAssembly(Assembly a_Assembly)
+    {
+      if ( a_Assembly==null ) throw new ArgumentNullException(nameof(a_Assembly));
+      m_Basis = a_Assembly;
+      if ( m_Basis.Location == null ) throw new ArgumentException($"Assembly '{a_Assembly}' has no location"); 
+    }
 
     public string DisolveType(object a_Value)
     {
@@ -87,10 +93,7 @@ namespace GTMH.S11n.TypeResolution
 
     public string GetAbsolutePath(string a_FileName)
     {
-      if ( a_FileName == "" ) return m_Basis.Location;
-      var basisDir = System.IO.Path.GetDirectoryName(m_Basis.Location);
-      if ( basisDir==null ) return a_FileName;
-      return System.IO.Path.Combine(basisDir, a_FileName).Replace("\\", "/");
+      return GetAbsolutePath(m_Basis.Location, a_FileName);
     }
 
     public Type ResolveType(string a_StringValue)
@@ -134,16 +137,13 @@ namespace GTMH.S11n.TypeResolution
       private Assembly ResolveFromCurrentContext(object sender, ResolveEventArgs args)
       {
         var assemblyName = new AssemblyName(args.Name);
-
-        // First try exact match from current context
         if(_currentAssemblies.TryGetValue(assemblyName.Name, out var assembly))
         {
           return assembly;
         }
-
-        // Try to find in currently loaded assemblies
-        return AppDomain.CurrentDomain.GetAssemblies()
-            .FirstOrDefault(a => a.GetName().Name == assemblyName.Name);
+        //// Try to find in currently loaded assemblies
+        //return AppDomain.CurrentDomain.GetAssemblies() .FirstOrDefault(a => a.GetName().Name == assemblyName.Name);
+        return null;
       }
     }
   }
