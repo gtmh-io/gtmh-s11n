@@ -1,4 +1,4 @@
-name: Build
+name: Build-Windows
 
 on:
   push:
@@ -8,29 +8,26 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 10.0.x
-    
+
     - name: Restore dependencies
-      run: dotnet restore src
-    
+      run: dotnet restore src\GUI
+
     - name: Build
-      run: dotnet build src --no-restore
-    
-    - name: Run tests
-      run: dotnet test src --no-build --verbosity normal
+      run: dotnet build src\GUI --no-restore
 
     - name: Pack NuGet packages
-      run: dotnet pack src --configuration Release --output ./nupkgs
+      run: dotnet pack src\GUI --configuration Release --output ./nupkgs
 
     - name: Publish to NuGet (only on main)
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: |
-        dotnet nuget push ./nupkgs/GTMH.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        dotnet nuget push .\nupkgs\GTMH.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
