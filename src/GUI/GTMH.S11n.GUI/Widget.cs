@@ -34,6 +34,11 @@ namespace GTMH.S11n.GUI
       m_FontUnconfigured = new Font(m_FontConfigured, FontStyle.Bold);
     }
 
+    public void SelectNode(TreeNode a_Node)
+    {
+      m_TreeView.SelectedNode = a_Node;
+    }
+
     private void OnNodeSelect(Object? sender, TreeViewEventArgs ea)
     {
       m_SplitContainer.Panel2.Controls.Clear();
