@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <OutputPath>vsbin/$(Configuration)</OutputPath>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <IsRoslynComponent>true</IsRoslynComponent>
+    <!-- for packaging -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <!-- for codegenerator packaging -->
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="GTMH.S11n.TypeResolution.UnitTests\**" />
+    <Compile Remove="vsbin\**" />
+    <EmbeddedResource Remove="GTMH.S11n.TypeResolution.UnitTests\**" />
+    <EmbeddedResource Remove="vsbin\**" />
+    <None Remove="GTMH.S11n.TypeResolution.UnitTests\**" />
+    <None Remove="vsbin\**" />
+    <Compile Remove=".*" />
+    <EmbeddedResource Remove=".*" />
+    <None Remove=".*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GTMH.S11n\GTMH.S11n.csproj" />
+  </ItemGroup>
+
+</Project>

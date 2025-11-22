@@ -51,6 +51,7 @@
       m_ListView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
       m_ListView.Size = new Size(568, 418);
       m_ListView.TabIndex = 0;
+      m_ListView.MouseDoubleClick += m_ListView_MouseDoubleClick;
       // 
       // m_AddButton
       // 

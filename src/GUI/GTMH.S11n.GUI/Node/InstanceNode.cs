@@ -95,9 +95,10 @@ namespace GTMH.S11n.GUI.Node
 
     internal void AppendNodeConfig(Dictionary<string, string> rval)
     {
-      if ( Assembly != "" && ClassName != "" )
+      if ( ClassName != "" )
       {
-        rval.Add($"{Context}", $"{ClassName},{Assembly}");
+        if ( Assembly == "" ) rval.Add(Context, ClassName);
+        else rval.Add(Context, $"{ClassName},{Assembly}");
       }
       foreach(var arg in m_Arguments)
       {

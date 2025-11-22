@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 using GTMH.S11n.GUI.Node;
 using GTMH.S11n.Reflection;
+using GTMH.S11n.TypeResolution;
 
 namespace GTMH.S11n.GUI
 {
@@ -16,9 +17,9 @@ namespace GTMH.S11n.GUI
     private InstanceNode RootNode { get; set; }
 
     public string? Assembly { get; private set; } = null;
-    private string ? m_Class;
+    public string ? ClassName { get; private set; } = null;
 
-    public LoadContext LoadContext { get; private set;} = new LoadContext();
+    public BasisAssembly ? LoadContext { get; private set;}
 
     Font m_FontUnconfigured;
     Font m_FontConfigured;
@@ -31,6 +32,11 @@ namespace GTMH.S11n.GUI
 
       m_FontConfigured = this.RootNode.NodeFont ?? m_TreeView.Font;
       m_FontUnconfigured = new Font(m_FontConfigured, FontStyle.Bold);
+    }
+
+    public void SelectNode(TreeNode a_Node)
+    {
+      m_TreeView.SelectedNode = a_Node;
     }
 
     private void OnNodeSelect(Object? sender, TreeViewEventArgs ea)
@@ -169,7 +175,14 @@ namespace GTMH.S11n.GUI
       return rval;
     }
 
-    public void SetObject(string a_Assembly, string a_Class)
+    public void SetType(Type a_Type)
+    {
+      if ( a_Type.Assembly.Location == null ) throw new ArgumentException("Can't work with type that's not persisted to disk");
+      else if ( a_Type.FullName == null ) throw new ArgumentException("Can't work with type with no name");
+      this.SetType(a_Type.Assembly.Location, a_Type.FullName);
+    }
+
+    public void SetType(string a_Assembly, string a_Class)
     {
       this.Clear();
       RootNode.Text=a_Class.Split('.').Last();
@@ -180,8 +193,8 @@ namespace GTMH.S11n.GUI
         Instantiable.Visit(a_Assembly, a_Class, pop);
         m_TreeView.SelectedNode = RootNode;
         this.Assembly = a_Assembly;
-        this.m_Class = a_Class;
-        LoadContext = new LoadContext( a_Assembly);
+        this.ClassName = a_Class;
+        LoadContext = new BasisAssembly( a_Assembly);
       }
       catch(Exception e)
       {
@@ -222,7 +235,7 @@ namespace GTMH.S11n.GUI
 
     public void SetDictionaryConfig(Dictionary<string, string> a_Config)
     {
-      if ( Assembly == null || m_Class == null )
+      if ( Assembly == null || ClassName == null )
       {
         throw new InvalidOperationException("Widget not configured with an object");
       }
@@ -231,7 +244,7 @@ namespace GTMH.S11n.GUI
       var pop = new ContentPopulator(this, RootNode, a_Config);
       try
       {
-        Instantiable.Visit(Assembly, m_Class, pop);
+        Instantiable.Visit(Assembly, ClassName, pop);
         m_TreeView.SelectedNode = RootNode;
         this.UpdateVisualCues();
       }
@@ -243,19 +256,26 @@ namespace GTMH.S11n.GUI
       }
     }
 
+    internal string GetBasisDirectory()
+    {
+      if ( Assembly == null ) return "";
+      var rval = System.IO.Path.GetDirectoryName(Assembly);
+      return rval??"";
+    }
+
     class ContentPopulator(Widget a_Control, InstanceNode a_Parent, Dictionary<string, string> a_Content) : StructurePopulator(a_Control, a_Parent)
     {
-       (string, string) parseAssembly(string value)
+      (string, string) parseAssembly(string value)
       {
         var idx = value.IndexOf(',');
-        if ( base.Control.Assembly==null) throw new InvalidOperationException("Widget not configured with an assembly");
-        if ( idx < 0 ) return (value, base.Control.Assembly);
+        if ( idx < 0 ) return (value, "");
         else return (value.Substring(0, idx).Trim(), value.Substring(idx+1).Trim());
       }
       private readonly Dictionary<string, string> Config = a_Content;
       string KeyFor(string a_Name) => Parent.Context == "" ? a_Name : $"{Parent.Context}.{a_Name}";
       public override void Visit(string a_Name, Type a_Type, bool a_Required)
       {
+        if (Control.LoadContext ==null ) throw new ArgumentNullException("Expect a load context");
         base.Visit(a_Name, a_Type, a_Required);
         if ( Config.TryGetValue( KeyFor(a_Name), out var instanceConfig ) )
         {
@@ -265,11 +285,12 @@ namespace GTMH.S11n.GUI
           var node = originalNode.Copy(assembly, cls);
           Control.UpdateNodeImpl(originalNode, node, false);
           var pop = new ContentPopulator(Control, node, Config);
-          Instantiable.Visit(assembly, cls, pop);
+          Instantiable.Visit(Control.LoadContext.GetAbsolutePath(assembly), cls, pop);
         }
       }
       public override void VisitList(string a_Name, Type a_Type, bool a_Required)
       {
+        if (Control.LoadContext ==null ) throw new ArgumentNullException("Expect a load context");
         base.VisitList(a_Name, a_Type, a_Required);
         var arrayLenKey = $"{KeyFor(a_Name)}.Array-Length";
         if(Config.TryGetValue(arrayLenKey, out var strVar)&&int.TryParse(strVar, out var arrayLen)&&arrayLen>0)
@@ -287,7 +308,7 @@ namespace GTMH.S11n.GUI
               var node = originalNode.Copy(assembly, cls);
               Control.UpdateNodeImpl(originalNode, node, false);
               var pop = new ContentPopulator(Control, node, Config);
-              Instantiable.Visit(assembly, cls, pop);
+              Instantiable.Visit(Control.LoadContext.GetAbsolutePath(assembly), cls, pop);
             }
           }
         }

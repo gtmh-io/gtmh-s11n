@@ -2,7 +2,7 @@
 
 A lightweight, attribute-based serialization library for C# that enables easy configuration and instantiation of polymorphic object graphs through simple key-value pairs.
 
-A Windows GUI for user space configuration of whatever it is you want to configure.
+A generic Windows GUI control for user space configuration of whatever it is you want to configure.
 
 ## What is GTMH.S11n?
 
@@ -117,6 +117,22 @@ Uses dot-notation for nested properties and array indexing:
 Head.Value - Sets the Value property on the Head object
 Body.0 - First element in the Body array
 Body.Array-Length - Specifies array size
+
+## GUI Editor
+There's a GUI control and a toy editor included in the repo.
+
+Most applications of the control would have a known type as the top level element. In the Toy the top level element can be chosen and instantiated via reflection.
+![Choice of object type](doc/img/gui_class_chooser.png)
+In this case an algorithm from the HelloWorldStateful project is configured with a head
+![Header element of algo](doc/img/gui_head.jpg)
+a variable length body
+![Variable length algo body](doc/img/gui_body.jpg)
+with elements
+![Config of body element](doc/img/gui_body_item.jpg)
+and a tail
+![Tail of algo](doc/img/gui_tail.jpg)
+
+Paths for child dlls are stored relative to the assembly of the top level type. This allows transportability of configuration across machines and operating systems. A consistently structured set of binaries is assumed for your tool sets.
 
 ## Source Generator Powered
 The partial keyword enables compile-time code generation for efficient serialization without reflection overhead.

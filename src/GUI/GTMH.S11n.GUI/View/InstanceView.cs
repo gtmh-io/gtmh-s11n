@@ -29,10 +29,11 @@ public partial class InstanceView : UserControl
     m_Node = @in;
     m_Widget = widget;
     m_Args.SetViewData(@in);
-    if(m_Node.Assembly != "")
+    if(m_Node.ClassName != "")
     {
+      if ( m_Widget.LoadContext == null ) throw new ArgumentException("Widget must have a load context");
       m_AssemblyTB.Text = m_Node.Assembly;
-      foreach(var ty in Instantiable.Find(m_Node.Assembly, m_Node.InterfaceType).OrderBy(_=>_))
+      foreach(var ty in Instantiable.Find(m_Widget.LoadContext.GetAbsolutePath(m_Node.Assembly), m_Node.InterfaceType).OrderBy(_=>_))
       {
         m_TypeSelector.Items.Add(ty);
         if ( ty == m_Node.ClassName ) m_TypeSelector.SelectedItem = ty;
@@ -51,6 +52,11 @@ public partial class InstanceView : UserControl
   private void m_TypeSelector_SelectedIndexChanged(object sender, EventArgs ea)
   {
     if ( m_Suppress ) return;
+    if ( m_Widget.LoadContext == null )
+    {
+      m_Widget.ShowError(new InvalidOperationException("Load context is not set"));
+      return;
+    }
     if(m_TypeSelector.SelectedItem == null)
     {
       m_Node.Clear();
@@ -62,7 +68,7 @@ public partial class InstanceView : UserControl
     var pop = new Widget.StructurePopulator(m_Widget, node);
     try
     {
-      Instantiable.Visit(m_AssemblyTB.Text, (string)m_TypeSelector.SelectedItem, pop);
+      Instantiable.Visit(m_Widget.LoadContext.GetAbsolutePath(m_AssemblyTB.Text), (string)m_TypeSelector.SelectedItem, pop);
     }
     catch(Exception e)
     {
@@ -75,9 +81,14 @@ public partial class InstanceView : UserControl
 
   private void m_BrowseButton_Click_1(object sender, EventArgs ea)
   {
+    if ( m_Widget.LoadContext == null )
+    {
+      m_Widget.ShowError(new InvalidOperationException("Load context is not set"));
+      return;
+    }
     var dlg = new OpenFileDialog();
     dlg.Filter = ".Net Assembly|*.dll";
-    using(var ll = dlg.LastLocation(m_Node.InterfaceType==null?$"InstanceView.{m_Node.Context}.Browse":$"InstanceView.{m_Node.Context}.{m_Node.InterfaceType.FullName}.Browse", m_Widget.LoadContext.Directory))
+    using(var ll = dlg.LastLocation(m_Node.InterfaceType==null?$"InstanceView.{m_Node.Context}.Browse":$"InstanceView.{m_Node.Context}.{m_Node.InterfaceType.FullName}.Browse", m_Widget.GetBasisDirectory()))
     {
       if ( dlg.ShowDialog(this) != DialogResult.OK )  return;
       ll.Commit();
@@ -89,7 +100,7 @@ public partial class InstanceView : UserControl
       {
         m_TypeSelector.Items.Add(ty);
       }
-      m_AssemblyTB.Text = dlg.FileName;
+      m_AssemblyTB.Text = m_Widget.LoadContext.GetRelativePath(dlg.FileName);
     }
     catch(Exception e)
     {

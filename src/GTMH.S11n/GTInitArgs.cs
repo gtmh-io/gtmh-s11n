@@ -43,16 +43,6 @@ namespace GTMH.S11n
       } };
     }
 
-    public Type ResolveType(string a_StringValue)
-    {
-      var rval = Type.GetType(a_StringValue);
-      if ( rval != null ) return rval;
-      foreach(var assembly in AppDomain.CurrentDomain.GetAssemblies())
-      {
-        rval = assembly.GetType(a_StringValue);
-        if(rval != null) return rval;
-      }
-      return null;
-    }
+    public Type ResolveType(string a_StringValue) => m_TypeResolution.ResolveType(a_StringValue);
   }
 }

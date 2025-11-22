@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTMH.S11n", "..\GTMH.S11n\G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorldStateful", "HelloWorldStateful\HelloWorldStateful.csproj", "{04A6365D-4439-45A4-AAB1-279B34A71BDB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorldStatefulExtended", "HelloWorldStatefulExtended\HelloWorldStatefulExtended.csproj", "{AB0C3C4C-C57C-4EEE-9449-20639B3D6231}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{04A6365D-4439-45A4-AAB1-279B34A71BDB}.Release|x64.Build.0 = Release|Any CPU
 		{04A6365D-4439-45A4-AAB1-279B34A71BDB}.Release|x86.ActiveCfg = Release|Any CPU
 		{04A6365D-4439-45A4-AAB1-279B34A71BDB}.Release|x86.Build.0 = Release|Any CPU
+		{AB0C3C4C-C57C-4EEE-9449-20639B3D6231}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB0C3C4C-C57C-4EEE-9449-20639B3D6231}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB0C3C4C-C57C-4EEE-9449-20639B3D6231}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AB0C3C4C-C57C-4EEE-9449-20639B3D6231}.Debug|x64.Build.0 = Debug|Any CPU
+		{AB0C3C4C-C57C-4EEE-9449-20639B3D6231}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AB0C3C4C-C57C-4EEE-9449-20639B3D6231}.Debug|x86.Build.0 = Debug|Any CPU
+		{AB0C3C4C-C57C-4EEE-9449-20639B3D6231}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB0C3C4C-C57C-4EEE-9449-20639B3D6231}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB0C3C4C-C57C-4EEE-9449-20639B3D6231}.Release|x64.ActiveCfg = Release|Any CPU
+		{AB0C3C4C-C57C-4EEE-9449-20639B3D6231}.Release|x64.Build.0 = Release|Any CPU
+		{AB0C3C4C-C57C-4EEE-9449-20639B3D6231}.Release|x86.ActiveCfg = Release|Any CPU
+		{AB0C3C4C-C57C-4EEE-9449-20639B3D6231}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

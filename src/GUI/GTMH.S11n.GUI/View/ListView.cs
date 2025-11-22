@@ -31,7 +31,7 @@ namespace GTMH.S11n.GUI.View
       m_ListView.DataSource = m_GridData;
       m_Node = ln;
       m_Control = widget;
-      m_ListView.SelectionChanged += (_,__)=>OnListSelectionChanged();
+      m_ListView.SelectionChanged += (_, __) => OnListSelectionChanged();
       PopulateListView();
     }
 
@@ -94,12 +94,14 @@ namespace GTMH.S11n.GUI.View
 
     private void m_UpButton_Click(object sender, EventArgs e)
     {
-      if ( m_Node == null ) return;
-      var idx = m_ListView.SelectedRows.Count> 0 ? m_ListView.SelectedRows[0].Index : -1;
-      if ( idx == -1 || idx == 0 ) return;
+      if(m_Node == null)
+        return;
+      var idx = m_ListView.SelectedRows.Count > 0 ? m_ListView.SelectedRows[0].Index : -1;
+      if(idx == -1 || idx == 0)
+        return;
       var tmp = m_Node.Nodes[idx];
       m_Node.Nodes.RemoveAt(idx);
-      m_Node.Nodes.Insert(idx-1, tmp);
+      m_Node.Nodes.Insert(idx - 1, tmp);
       var currIdx = 0;
       foreach(InstanceNode node in m_Node.Nodes)
       {
@@ -109,19 +111,21 @@ namespace GTMH.S11n.GUI.View
       m_GridData.Clear();
       PopulateListView();
       m_ListView.ClearSelection();
-      m_ListView.Rows[idx-1].Selected=true;
+      m_ListView.Rows[idx - 1].Selected = true;
       this.OnListSelectionChanged();
       m_Control.SetDirty();
     }
 
     private void m_DownButton_Click(object sender, EventArgs e)
     {
-      if ( m_Node==null ) return;
-      var idx = m_ListView.SelectedRows.Count> 0 ? m_ListView.SelectedRows[0].Index : -1;
-      if ( idx == -1 || idx == m_ListView.RowCount-1) return;
+      if(m_Node == null)
+        return;
+      var idx = m_ListView.SelectedRows.Count > 0 ? m_ListView.SelectedRows[0].Index : -1;
+      if(idx == -1 || idx == m_ListView.RowCount - 1)
+        return;
       var tmp = m_Node.Nodes[idx];
       m_Node.Nodes.RemoveAt(idx);
-      m_Node.Nodes.Insert(idx+1, tmp);
+      m_Node.Nodes.Insert(idx + 1, tmp);
       var currIdx = 0;
       foreach(InstanceNode node in m_Node.Nodes)
       {
@@ -131,9 +135,22 @@ namespace GTMH.S11n.GUI.View
       m_GridData.Clear();
       PopulateListView();
       m_ListView.ClearSelection();
-      m_ListView.Rows[idx+1].Selected=true;
+      m_ListView.Rows[idx + 1].Selected = true;
       this.OnListSelectionChanged();
       m_Control.SetDirty();
+    }
+
+    private void m_ListView_MouseDoubleClick(object sender, MouseEventArgs e)
+    {
+      if(m_Node == null)
+        return;
+      var hitTest = m_ListView.HitTest(e.X, e.Y);
+
+      if(hitTest.Type == DataGridViewHitTestType.Cell)
+      {
+        int rowIndex = hitTest.RowIndex;
+        m_Control.SelectNode(m_Node.Nodes[rowIndex]);
+      }
     }
   }
 }
