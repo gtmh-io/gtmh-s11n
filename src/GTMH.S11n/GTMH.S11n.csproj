@@ -8,9 +8,7 @@
     <!-- for packaging -->
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Version>1.1.88</Version>
-    <!-- for codegenerator packaging -->
-    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <Version>1.1.89</Version>
     <!-- this causes the package to be added with the correct PackageReference defn for codegen to be run -->
     <DevelopmentDependency>true</DevelopmentDependency>
   </PropertyGroup>
