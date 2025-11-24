@@ -7,6 +7,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <OutputPath>vsbin/$(Configuration)</OutputPath>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <!-- for packaging -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Version>1.1.90</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,10 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GTMH.S11n" Version="1.1.89">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="GTMH.S11n" Version="1.1.90"/>
+    <PackageReference Include="GTMH.S11n.Reflection" Version="1.1.90"/>
+    <PackageReference Include="GTMH.S11n.TypeResolution" Version="1.1.90"/>
     <PackageReference Include="GTMH.Windows" Version="*" />
   </ItemGroup>
 
