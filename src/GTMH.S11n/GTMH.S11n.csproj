@@ -8,8 +8,8 @@
     <!-- for packaging -->
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <!-- for codegenerator packaging -->
     <Version>1.1.88</Version>
+    <!-- for codegenerator packaging -->
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <!-- this causes the package to be added with the correct PackageReference defn for codegen to be run -->
     <DevelopmentDependency>true</DevelopmentDependency>
@@ -33,6 +33,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove=".GTFieldsClassGenerator.cs.swp" />
+    <None Remove="vsbin/Debug\netstandard2.0\\GTMH.S11n.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="vsbin/Debug\netstandard2.0\\GTMH.S11n.dll" />
   </ItemGroup>
   <ItemGroup>
